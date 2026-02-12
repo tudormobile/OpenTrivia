@@ -8,7 +8,7 @@ namespace OpenTrivia.Tests;
 public class OpenTriviaServiceCollectionExtensionsTests
 {
     [TestMethod]
-    public void AddAlphaVantageClient_WithValidConfiguration_RegistersServices()
+    public void AddOpenTriviaClient_WithValidConfiguration_RegistersServices()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -24,7 +24,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_WithNullServices_ThrowsArgumentNullException()
+    public void AddOpenTriviaClient_WithNullServices_ThrowsArgumentNullException()
     {
         // Arrange
         IServiceCollection? services = null;
@@ -40,7 +40,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_WithNullConfigure_ThrowsArgumentNullException()
+    public void AddOpenTriviaClient_WithNullConfigure_ThrowsArgumentNullException()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -55,7 +55,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_RegistersHttpClient()
+    public void AddOpenTriviaClient_RegistersHttpClient()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -71,7 +71,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_RegistersClientWithScopedLifetime()
+    public void AddOpenTriviaClient_RegistersClientWithScopedLifetime()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -87,7 +87,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_ReturnsSameServiceCollection()
+    public void AddOpenTriviaClient_ReturnsSameServiceCollection()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -100,7 +100,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_CanBeCalledMultipleTimes()
+    public void AddOpenTriviaClient_CanBeCalledMultipleTimes()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -117,7 +117,7 @@ public class OpenTriviaServiceCollectionExtensionsTests
     }
 
     [TestMethod]
-    public void AddAlphaVantageClient_ResolvesRequiredDependencies()
+    public void AddOpenTriviaClient_ResolvesRequiredDependencies()
     {
         // Arrange
         var services = new ServiceCollection();

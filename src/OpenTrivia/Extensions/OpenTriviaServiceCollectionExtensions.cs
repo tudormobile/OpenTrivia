@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 namespace Tudormobile.OpenTrivia.Extensions;
 
 /// <summary>
-/// Provides extension methods for registering Alpha Vantage client services with an <see cref="IServiceCollection"/>.
+/// Provides extension methods for registering Open Trivia client services with an <see cref="IServiceCollection"/>.
 /// </summary>
-/// <remarks>Use these extension methods to add and configure Alpha Vantage API clients in ASP.NET Core dependency
-/// injection containers. This enables applications to access financial data from Alpha Vantage using strongly-typed
+/// <remarks>Use these extension methods to add and configure Open Trivia API clients in ASP.NET Core dependency
+/// injection containers. This enables applications to access trivia data from Open Trivia using strongly-typed
 /// services.</remarks>
 public static class OpenTriviaServiceCollectionExtensions
 {

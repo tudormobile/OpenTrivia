@@ -12,7 +12,7 @@ internal class Program
     {
         Console.WriteLine("Hello, World!");
 
-        // Setup Host with AlphaVantage Client
+        // Setup Host with Open Trivia DB Client
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
         builder.Services

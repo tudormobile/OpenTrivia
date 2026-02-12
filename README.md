@@ -28,6 +28,15 @@ Console.WriteLine($"Found {query.Data.Count} questions.")
 using Tudormobile.OpenTrivia;
 using Tudormobile.OpenTrivia.Extensions;
 
+var httpClient = new HttpClient();
+var client = OpenTriviaClient.GetBuilder()
+                .WithHttpClient(httoClient)
+                .Build();
+
+var query = await client.GetQuestionsAsync(amount: 10);
+
+Console.WriteLine($"Found {query.Data.Count} questions.")
+
 ```
 #### Using dependency injection:
 ```cs
@@ -35,6 +44,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tudormobile.OpenTrivia;
 using Tudormobile.OpenTrivia.Extensions;
+
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+
+ builder.Services
+    .AddOpenTriviaClient(builder => { })
+    .AddLogging(builder => builder.AddConsole());
+
+using IHost host = builder.Build();
+var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+var client = host.Services.GetRequiredService<IOpenTriviaClient>();
+
+var query = await client.GetQuestionsAsync(amount: 10);
+
+Console.WriteLine($"Found {query.Data.Count} questions.")
 
 ```
 > [!TIP]
