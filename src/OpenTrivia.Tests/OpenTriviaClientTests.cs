@@ -103,6 +103,30 @@ public class OpenTriviaClientTests
         Assert.AreEqual(existingToken.Token, response.Data.Token);
     }
 
+    [DataRow(0, DisplayName = "Zero amount")]
+    [DataRow(-1, DisplayName = "Negative amount")]
+    [DataRow(51, DisplayName = "Amount exceeds maximum (51)")]
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsAsync_WithInvalidAmount_Throws(int invalidAmount)
+    {
+        // Arrange
+        using var mockHandler = new MockHttpMessageHandler()
+        {
+            JsonResponse = @"{
+                ""response_code"": 0,
+                ""results"": []
+            }"
+        };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient);
+        // Act & Assert
+        await Assert.ThrowsExactlyAsync<ArgumentOutOfRangeException>(async () =>
+        {
+            var response = await client.GetQuestionsAsync(invalidAmount, cancellationToken: TestContext.CancellationToken);
+        });
+
+    }
+
     [TestMethod]
     public async Task OpenTriviaClient_GetQuestionsAsync_NoOptions()
     {

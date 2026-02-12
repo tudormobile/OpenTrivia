@@ -33,7 +33,7 @@ public class OpenTriviaClient : IOpenTriviaClient
     /// Initializes a new instance of the <see cref="OpenTriviaClient"/> class.
     /// </summary>
     /// <param name="httpClientFactory">The factory used to create HTTP client instances for sending requests to the API. Cannot be null.</param>
-    /// <param name="logger"></param>
+    /// <param name="logger">Optional logger instance for logging diagnostic information. If null, a NullLogger will be used.</param>
     /// <param name="manageRateLimit">Automatically manage rate limits.</param>
     public OpenTriviaClient(IHttpClientFactory httpClientFactory,
         ILogger? logger = null,
@@ -50,6 +50,9 @@ public class OpenTriviaClient : IOpenTriviaClient
     /// <inheritdoc/>
     public Task<ApiResponse<List<TriviaQuestion>>> GetQuestionsAsync(int amount, TriviaCategory? category = null, TriviaQuestionDifficulty? difficulty = null, TriviaQuestionType? type = null, ApiEncodingType? encoding = null, ApiSessionToken? token = null, CancellationToken cancellationToken = default)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount, nameof(amount));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(amount, ApiConstants.MaxAmount, nameof(amount));
+
         var uriString = $"{ApiConstants.BaseQuestionUrl}?amount={amount}";
 
         // Category

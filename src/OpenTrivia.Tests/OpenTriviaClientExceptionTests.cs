@@ -88,7 +88,7 @@ public class OpenTriviaClientExceptionTests
         Assert.AreEqual((int)statusCode, response.StatusCode);
     }
 
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 
     [ExcludeFromCodeCoverage]
     public class MockHttpClientFactory : IHttpClientFactory, IDisposable

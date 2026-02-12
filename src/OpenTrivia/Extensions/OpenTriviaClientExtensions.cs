@@ -51,13 +51,22 @@ public static class OpenTriviaClientExtensions
                 StatusCode = 400
             };
 
+            ArgumentNullException.ThrowIfNull(categories, nameof(categories));
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount, nameof(amount));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(amount, ApiConstants.MaxAmount, nameof(amount));
+
             // If multiple categories are provided, we need to make separate requests for each category and combine the results
             // Furthermore, the API rate limits to 1 request per second, so we need to manage that as well if multiple categories are provided
-            if (categories is not null && categories.Any())
+            bool isFirstRequest = true;
+            if (categories.Any())
             {
                 foreach (var category in categories)
                 {
-                    await Task.Delay(1000, cancellationToken);
+                    if (!isFirstRequest)
+                    {
+                        await Task.Delay(ApiConstants.RateLimitSeconds * 1000, cancellationToken);
+                    }
+                    isFirstRequest = false;
                     questions = await client.GetQuestionsAsync(amount, category, difficulty, type, encoding, token, cancellationToken);
                     if (questions.Data is not null)
                     {

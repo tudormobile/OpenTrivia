@@ -26,6 +26,7 @@ internal class OpenTriviaClientBuilder : IOpenTriviaClientBuilder
 
     public IOpenTriviaClientBuilder WithHttpClient(HttpClient httpClient)
     {
+        ArgumentNullException.ThrowIfNull(httpClient);
         _httpClient = httpClient;
         return this;
     }

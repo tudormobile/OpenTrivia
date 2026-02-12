@@ -18,6 +18,7 @@ public class OpenTriviaClientExtensionsTests
     public static void ClassCleanup()
     {
         _httpClient!.Dispose();
+        _mockHttpMessageHandler?.Dispose();
     }
 
     [TestMethod]
@@ -35,6 +36,15 @@ public class OpenTriviaClientExtensionsTests
             .Build();
         // Assert
         Assert.IsInstanceOfType<IOpenTriviaClient>(target);
+    }
+
+    [TestMethod]
+    public void Build_WithNullHttpClient_ThrowsArgumentNullException()
+    {
+        // Arrange
+        IOpenTriviaClientBuilder builder = OpenTriviaClient.GetBuilder();
+        // Act & Assert
+        Assert.ThrowsExactly<ArgumentNullException>(() => builder.WithHttpClient(null!));
     }
 
     [TestMethod]
@@ -69,7 +79,7 @@ public class OpenTriviaClientExtensionsTests
         var client = OpenTriviaClient.GetBuilder().WithHttpClient(httpClient).Build();
 
         // Act
-        var result = await client.GetQuestionsAsync(5, categories, TriviaQuestionDifficulty.Medium, TriviaQuestionType.MultipleChoice);
+        var result = await client.GetQuestionsAsync(5, categories, TriviaQuestionDifficulty.Medium, TriviaQuestionType.MultipleChoice, cancellationToken: TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.IsSuccess);
@@ -107,7 +117,7 @@ public class OpenTriviaClientExtensionsTests
         var client = OpenTriviaClient.GetBuilder().WithHttpClient(httpClient).Build();
 
         // Act
-        var result = await client.GetQuestionsAsync(5, categories, TriviaQuestionDifficulty.Medium, TriviaQuestionType.MultipleChoice);
+        var result = await client.GetQuestionsAsync(5, categories, TriviaQuestionDifficulty.Medium, TriviaQuestionType.MultipleChoice, cancellationToken: TestContext.CancellationToken);
 
         // Assert
         Assert.IsFalse(result.IsSuccess);
@@ -116,7 +126,7 @@ public class OpenTriviaClientExtensionsTests
     }
 
     [TestMethod]
-    public async Task GetQuestionsAsync_WithNullCategories_ReturnsEmptyList()
+    public async Task GetQuestionsAsync_WithNullCategories_Throws()
     {
         // Arrange
         List<TriviaCategory>? categories = null;
@@ -143,14 +153,11 @@ public class OpenTriviaClientExtensionsTests
         using var httpClient = new HttpClient(mockHttpMessageHandler);
         var client = OpenTriviaClient.GetBuilder().WithHttpClient(httpClient).Build();
 
-        // Act
-        var result = await client.GetQuestionsAsync(5, categories, TriviaQuestionDifficulty.Medium, TriviaQuestionType.MultipleChoice);
-
-        // Assert
-        Assert.IsFalse(result.IsSuccess);
-        Assert.IsNotNull(result.Data);
-        Assert.IsEmpty(result.Data);
+        // Act & Assert
+#pragma warning disable CS8604 // Possible null reference argument.
+        await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => _ = await client.GetQuestionsAsync(5, categories, TriviaQuestionDifficulty.Medium, TriviaQuestionType.MultipleChoice, cancellationToken: TestContext.CancellationToken));
+#pragma warning restore CS8604 // Possible null reference argument.
     }
 
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 }
