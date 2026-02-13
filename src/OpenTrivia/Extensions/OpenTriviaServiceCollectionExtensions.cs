@@ -35,8 +35,8 @@ public static class OpenTriviaServiceCollectionExtensions
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             var logger = sp.GetRequiredService<ILogger<OpenTriviaClient>>();
 
-            // Use the captured API key from the builder
-            return new OpenTriviaClient(httpClientFactory, logger);
+            // Use the captured options from the builder
+            return new OpenTriviaClient(httpClientFactory, logger, builder.Serializer, builder.ManageRateLimit);
         });
 
         return services;

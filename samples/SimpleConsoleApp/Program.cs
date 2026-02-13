@@ -8,7 +8,7 @@ internal class Program
         Console.WriteLine("Hello, World!");
 
         var httpClient = new HttpClient();
-        var client = new OpenTriviaClient(httpClient);
+        var client = IOpenTriviaClient.Create(httpClient);
 
         var query = client.GetQuestionsAsync(amount: 10);
 

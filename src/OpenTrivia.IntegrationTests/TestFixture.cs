@@ -34,7 +34,7 @@ public class TestFixture
         };
 
         // Create a shared OpenTriviaClient
-        _sharedClient = new OpenTriviaClient(_sharedHttpClient);
+        _sharedClient = IOpenTriviaClient.Create(_sharedHttpClient);
 
         context.WriteLine("Integration test assembly initialized");
         context.WriteLine($"Using real OpenTrivia API at: {ApiConstants.BaseQuestionUrl}");
@@ -49,5 +49,13 @@ public class TestFixture
         _sharedHttpClient?.Dispose();
         _sharedHttpClient = null;
         _sharedClient = null;
+    }
+    [TestMethod]
+    public void CreateClient_ShouldSucceed()
+    {
+        // Arrange & Act
+        var client = IOpenTriviaClient.Create(SharedHttpClient);
+        // Assert
+        Assert.IsNotNull(client);
     }
 }

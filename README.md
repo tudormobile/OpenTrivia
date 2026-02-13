@@ -14,7 +14,7 @@ A c# library to access the Open Trivia Database (OpenTriviaDB) Api.
 using Tudormobile.OpenTrivia;
 
 var httpClient = new HttpClient();
-var client = new OpenTriviaClient(httpClient);
+var client = IOpenTriviaClient.Create(httpClient);
 
 var query = await client.GetQuestionsAsync(amount: 10);
 
@@ -29,8 +29,8 @@ using Tudormobile.OpenTrivia;
 using Tudormobile.OpenTrivia.Extensions;
 
 var httpClient = new HttpClient();
-var client = OpenTriviaClient.GetBuilder()
-                .WithHttpClient(httoClient)
+var client = IOpenTriviaClient.GetBuilder()
+                .WithHttpClient(httpClient)
                 .Build();
 
 var query = await client.GetQuestionsAsync(amount: 10);

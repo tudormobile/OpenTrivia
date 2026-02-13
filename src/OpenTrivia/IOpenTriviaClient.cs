@@ -1,10 +1,24 @@
-﻿namespace Tudormobile.OpenTrivia;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Tudormobile.OpenTrivia;
 
 /// <summary>
 /// Defines methods for interacting with the Open Trivia Database API.
 /// </summary>
 public interface IOpenTriviaClient
 {
+    /// <summary>
+    /// Creates and initializes an instance of the <see cref="IOpenTriviaClient"/> interface.
+    /// </summary>
+    /// <param name="httpClient">The HttpClient class to use.</param>
+    /// <param name="logger">Optional logger instance for logging diagnostic information. If null, a NullLogger will be used.</param>
+    /// <param name="serializer">Optional serializer instance for serializing and deserializing API data. If null, the internal serializer will be used.</param>
+    /// <param name="manageRateLimit">Automatically manage rate limits.</param>
+    public static IOpenTriviaClient Create(HttpClient httpClient,
+        ILogger? logger = null,
+        IApiDataSerializer? serializer = null,
+        bool manageRateLimit = false) => new OpenTriviaClient(httpClient, logger, serializer, manageRateLimit);
+
     /// <summary>
     /// Retrieves a new session token from the API.
     /// </summary>

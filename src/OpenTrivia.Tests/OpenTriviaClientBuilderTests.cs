@@ -1,10 +1,47 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 
 namespace OpenTrivia.Tests;
 
 [TestClass]
 public class OpenTriviaClientBuilderTests
 {
+    [TestMethod]
+    public void ManageRateLimit_SetsManageRateLimit()
+    {
+        // Arrange
+        var manageRateLimit = true;
+        var builder = new OpenTriviaClientBuilder();
+        // Act
+        builder.WithRateLimitManagement(manageRateLimit);
+
+        // Assert
+        Assert.AreEqual(manageRateLimit, builder.ManageRateLimit);
+    }
+
+    [TestMethod]
+    public void ManageRateLimit_DefaultsToFalse()
+    {
+        // Arrange
+        var builder = new OpenTriviaClientBuilder();
+        // Act & Assert
+        Assert.IsFalse(builder.ManageRateLimit);
+    }
+
+
+    [TestMethod]
+    public void WithSerializer_SetsSerializer()
+    {
+        // Arrange
+        var builder = new OpenTriviaClientBuilder();
+        var serializer = new MockSerializer();
+        // Act
+        builder.WithSerializer(serializer);
+
+        // Assert
+        Assert.AreEqual(serializer, builder.Serializer);
+    }
+
     [TestMethod]
     public void WithLogger_SetsLogger()
     {
@@ -122,5 +159,20 @@ public class OpenTriviaClientBuilderTests
         {
             // No-op
         }
+    }
+    [ExcludeFromCodeCoverage]
+    class MockSerializer : IApiDataSerializer
+    {
+        public ApiResponseCode GetResponseCode(JsonDocument document)
+            => throw new NotImplementedException();
+
+        public List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document)
+            => throw new NotImplementedException();
+
+        public List<TriviaCategory> DeserializeTriviaCategories(JsonDocument document)
+            => throw new NotImplementedException();
+
+        public ApiSessionToken DeserializeSessionToken(JsonDocument document)
+            => throw new NotImplementedException();
     }
 }
