@@ -36,8 +36,9 @@ jobs:
       with:
         updateProjectFiles: true
 
+    # Regular unit tests (EXCLUDE integration)
     - name: Unit tests
-      run: dotnet test --coverage --report-trx --report-trx-filename "output.trx"
+      run: dotnet test --filter "TestCategory!=Integration" --coverage --report-trx
 
     - name: Build
       run: |
