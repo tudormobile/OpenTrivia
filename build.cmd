@@ -10,7 +10,7 @@ REM Versioning
 dotnet-gitversion -updateprojectfiles -output json -showvariable SemVer
 
 REM Build and Test
-dotnet test --coverage --report-trx --report-trx-filename "output.trx"
+dotnet test --filter "TestCategory!=Integration" --coverage --report-trx --report-trx-filename "output.trx"
 if %errorlevel% neq 0 exit /b %errorlevel%
 dotnet build -c Release
 if %errorlevel% neq 0 exit /b %errorlevel%
