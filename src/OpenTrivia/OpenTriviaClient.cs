@@ -38,7 +38,7 @@ internal class OpenTriviaClient : IOpenTriviaClient
     /// <param name="logger">Optional logger instance for logging diagnostic information. If null, a NullLogger will be used.</param>
     /// <param name="serializer">Optional serializer instance for serializing and deserializing API data. If null, the internal serializer will be used.</param>
     /// <param name="manageRateLimit">Automatically manage rate limits.</param>
-    public OpenTriviaClient(IHttpClientFactory httpClientFactory,
+    internal OpenTriviaClient(IHttpClientFactory httpClientFactory,
         ILogger? logger = null,
         IApiDataSerializer? serializer = null,
         bool manageRateLimit = false) : this(httpClientFactory.CreateClient(nameof(OpenTriviaClient)), logger, serializer, manageRateLimit) { }
