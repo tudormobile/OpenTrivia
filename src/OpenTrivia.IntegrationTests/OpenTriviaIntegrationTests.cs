@@ -7,14 +7,14 @@ namespace OpenTrivia.IntegrationTests;
 public class OpenTriviaIntegrationTests
 {
     private static IOpenTriviaClient _client => TestFixture.SharedClient;
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 
     [TestMethod]
     [TestCategory("RealApi")]
     public async Task GetCategories_ReturnsValidCategories()
     {
         // Act
-        var result = await _client!.GetCategoriesAsync(TestContext.CancellationToken);
+        var result = await _client.GetCategoriesAsync(TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.IsSuccess);
@@ -28,7 +28,7 @@ public class OpenTriviaIntegrationTests
     public async Task GetSessionToken_ReturnsValidToken()
     {
         // Act
-        var result = await _client!.GetSessionTokenAsync(TestContext.CancellationToken);
+        var result = await _client.GetSessionTokenAsync(TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.IsSuccess);
@@ -41,11 +41,11 @@ public class OpenTriviaIntegrationTests
     public async Task GetQuestions_WithValidParameters_ReturnsQuestions()
     {
         // Arrange
-        var categories = await _client!.GetCategoriesAsync(TestContext.CancellationToken);
+        var categories = await _client.GetCategoriesAsync(TestContext.CancellationToken);
         var category = categories.Data?.FirstOrDefault();
 
         // Act
-        var result = await _client!.GetQuestionsAsync(
+        var result = await _client.GetQuestionsAsync(
             5,
             category,
             TriviaQuestionDifficulty.Easy,
@@ -66,12 +66,12 @@ public class OpenTriviaIntegrationTests
     public async Task RateLimiting_RespectsFiveSecondDelay()
     {
         // Arrange
-        var categories = await _client!.GetCategoriesAsync(TestContext.CancellationToken);
+        var categories = await _client.GetCategoriesAsync(TestContext.CancellationToken);
         var firstTwoCategories = categories.Data?.Take(2).ToList();
 
         // Act
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        var result = await _client!.GetQuestionsAsync(
+        var result = await _client.GetQuestionsAsync(
             5,
             firstTwoCategories!,
             cancellationToken: TestContext.CancellationToken);
@@ -89,18 +89,18 @@ public class OpenTriviaIntegrationTests
     public async Task SessionToken_WorkflowTest()
     {
         // Arrange - Get a token
-        var tokenResult = await _client!.GetSessionTokenAsync(TestContext.CancellationToken);
+        var tokenResult = await _client.GetSessionTokenAsync(TestContext.CancellationToken);
         Assert.IsTrue(tokenResult.IsSuccess);
         var token = tokenResult.Data!;
 
         // Act - Use the token to get questions
-        var questionsResult = await _client!.GetQuestionsAsync(5, token: token, cancellationToken: TestContext.CancellationToken);
+        var questionsResult = await _client.GetQuestionsAsync(5, token: token, cancellationToken: TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(questionsResult.IsSuccess);
 
         // Act - Reset the token
-        var resetResult = await _client!.ResetSessionTokenAsync(token, TestContext.CancellationToken);
+        var resetResult = await _client.ResetSessionTokenAsync(token, TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(resetResult.IsSuccess);

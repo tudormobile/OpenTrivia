@@ -3,6 +3,8 @@
 [TestClass]
 public class OpenTriviaClientTests
 {
+    public TestContext TestContext { get; set; } // MSTest will set this property
+
     [TestMethod]
     public async Task OpenTriviaClient_GetSessionTokenAsync_ReturnsToken()
     {
@@ -319,6 +321,4 @@ public class OpenTriviaClientTests
         Assert.HasCount(0, response.Data);
     }
 
-
-    public TestContext TestContext { get; set; }
 }

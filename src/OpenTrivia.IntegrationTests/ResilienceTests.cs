@@ -8,7 +8,7 @@ namespace OpenTrivia.IntegrationTests;
 public class ResilienceTests
 {
     private static IOpenTriviaClient _client => TestFixture.SharedClient;
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 
     [TestMethod]
     [Timeout(30000, CooperativeCancellation = true)] // 30 second timeout
@@ -50,7 +50,7 @@ public class ResilienceTests
     public async Task GetQuestions_RespectsCancellationToken()
     {
         // Arrange
-        var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
 
         // Act
         var task = _client.GetQuestionsAsync(50, cancellationToken: cts.Token);
