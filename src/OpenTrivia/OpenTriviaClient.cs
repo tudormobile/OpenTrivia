@@ -6,27 +6,29 @@ namespace Tudormobile.OpenTrivia;
 /// <summary>
 /// Implements the <see cref="IOpenTriviaClient"/> interface to provide methods for interacting with the Open Trivia Database API.
 /// </summary>
-public class OpenTriviaClient : IOpenTriviaClient
+internal class OpenTriviaClient : IOpenTriviaClient
 {
     private readonly HttpClient _httpClient;
     private readonly bool _manageRateLimit;
     private readonly ILogger _logger;
-    private readonly ApiDataSerializer _serializer;
+    private readonly IApiDataSerializer _serializer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenTriviaClient"/> class.
     /// </summary>
     /// <param name="httpClient">The HttpClient class to use.</param>
     /// <param name="logger">Optional logger instance for logging diagnostic information. If null, a NullLogger will be used.</param>
+    /// <param name="serializer">Optional serializer instance for serializing and deserializing API data. If null, the internal serializer will be used.</param>
     /// <param name="manageRateLimit">Automatically manage rate limits.</param>
-    public OpenTriviaClient(HttpClient httpClient,
+    internal OpenTriviaClient(HttpClient httpClient,
         ILogger? logger = null,
+        IApiDataSerializer? serializer = null,
         bool manageRateLimit = false)
     {
         _httpClient = httpClient;
         _manageRateLimit = manageRateLimit;
         _logger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance;
-        _serializer = new ApiDataSerializer();
+        _serializer = serializer ?? new ApiDataSerializer();
     }
 
     /// <summary>
@@ -34,10 +36,12 @@ public class OpenTriviaClient : IOpenTriviaClient
     /// </summary>
     /// <param name="httpClientFactory">The factory used to create HTTP client instances for sending requests to the API. Cannot be null.</param>
     /// <param name="logger">Optional logger instance for logging diagnostic information. If null, a NullLogger will be used.</param>
+    /// <param name="serializer">Optional serializer instance for serializing and deserializing API data. If null, the internal serializer will be used.</param>
     /// <param name="manageRateLimit">Automatically manage rate limits.</param>
-    public OpenTriviaClient(IHttpClientFactory httpClientFactory,
+    internal OpenTriviaClient(IHttpClientFactory httpClientFactory,
         ILogger? logger = null,
-        bool manageRateLimit = false) : this(httpClientFactory.CreateClient(nameof(OpenTriviaClient)), logger, manageRateLimit) { }
+        IApiDataSerializer? serializer = null,
+        bool manageRateLimit = false) : this(httpClientFactory.CreateClient(nameof(OpenTriviaClient)), logger, serializer, manageRateLimit) { }
 
     /// <inheritdoc/>
     public Task<ApiResponse<ApiSessionToken>> GetSessionTokenAsync(CancellationToken cancellationToken = default)
@@ -95,7 +99,7 @@ public class OpenTriviaClient : IOpenTriviaClient
         var result = await GetApiResult(ApiConstants.CategoryUrl, _serializer.DeserializeTriviaCategories, cancellationToken);
         if (result.Data != null)
         {
-            result.ResponseCode = result.Data.Any() ? ApiResponseCode.Success : ApiResponseCode.NoResults;
+            result.ResponseCode = result.Data.Count != 0 ? ApiResponseCode.Success : ApiResponseCode.NoResults;
         }
         return result;
     }

@@ -6,6 +6,21 @@ public class OpenTriviaClientTests
     public TestContext TestContext { get; set; } // MSTest will set this property
 
     [TestMethod]
+    public void OpenTriviaClient_Create_WithArguments_CreatesClient()
+    {
+        // Arrange
+        using var mockHandler = new MockHttpMessageHandler();
+        using var httpClient = new HttpClient(mockHandler);
+        var serializer = new ApiDataSerializer();
+
+        // Act
+        var client = IOpenTriviaClient.Create(httpClient, serializer: serializer);
+
+        // Assert
+        Assert.IsInstanceOfType<IOpenTriviaClient>(client);
+    }
+
+    [TestMethod]
     public async Task OpenTriviaClient_GetSessionTokenAsync_ReturnsToken()
     {
         // Arrange
