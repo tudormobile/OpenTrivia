@@ -47,4 +47,29 @@ public interface IOpenTriviaClientBuilder
     /// <returns>An instance of <see cref="IOpenTriviaClientBuilder"/> for further client configuration.</returns>
     IOpenTriviaClientBuilder WithRateLimitManagement(bool manageRateLimit);
 
+    /// <summary>
+    /// Configures the client to automatically decode API responses.
+    /// </summary>
+    /// <param name="autoDecode">A value indicating whether automatic decoding should be enabled. Defaults to <see langword="true"/>.</param>
+    /// <returns>An instance of <see cref="IOpenTriviaClientBuilder"/> for further client configuration.</returns>
+    /// <remarks>
+    /// Automatic decoding converts API responses from their encoded format (e.g., Base64) to a human-readable format. This
+    /// takes place regardless of the encoding type specified for API communication, ensuring that the client can handle responses
+    /// appropriately without requiring manual decoding by the caller. In cases where an explicit encodeing
+    /// is specified in a method call, that encoding will be used; otherwise, the configured encoding type for the client
+    /// is used if set, or the default encoding behavior of the API is applied. This allows for flexible handling of API responses while ensuring that the
+    /// configured encoding is used.
+    /// </remarks>
+    IOpenTriviaClientBuilder UseAutoDecoding(bool autoDecode = true);
+
+    /// <summary>
+    /// Configures the client to use the specified encoding type for API requests.
+    /// </summary>
+    /// <param name="encodingType">The encoding type to use for API communication.</param>
+    /// <returns>An instance of <see cref="IOpenTriviaClientBuilder"/> for further client configuration.</returns>
+    /// <remarks>
+    /// Specifies the encoding type to use for API communication. This setting determines how the client 
+    /// encodes requests and decodes responses when an explicit encoding is is not specified in a method
+    /// call.
+    IOpenTriviaClientBuilder WithEncoding(ApiEncodingType encodingType);
 }

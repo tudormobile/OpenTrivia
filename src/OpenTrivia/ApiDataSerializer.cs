@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
+using System.Web;
 
 namespace Tudormobile.OpenTrivia;
 
@@ -32,7 +34,22 @@ internal class ApiDataSerializer : IApiDataSerializer
         return categories;
     }
 
-    public List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document)
+    private static string DecodeJsonElementString(JsonElement jsonElement, ApiEncodingType? encodingType)
+    {
+        var value = jsonElement.GetString()!;
+        if (encodingType.HasValue)
+        {
+            value = encodingType.Value switch
+            {
+                ApiEncodingType.Url3986 => Uri.UnescapeDataString(value),
+                ApiEncodingType.Base64 => Encoding.UTF8.GetString(Convert.FromBase64String(value)),
+                _ => HttpUtility.HtmlDecode(value)
+            };
+        }
+        return value;
+    }
+
+    public List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document, ApiEncodingType? decodingType = null)
     {
         var categoryId = 1;
         List<TriviaCategory> categories = [];
@@ -43,7 +60,7 @@ internal class ApiDataSerializer : IApiDataSerializer
             foreach (var questionElement in questionsArray.EnumerateArray())
             {
                 var categoryName = questionElement.TryGetProperty("category", out var categoryElement) && categoryElement.ValueKind == JsonValueKind.String
-                    ? categoryElement.GetString()!
+                    ? DecodeJsonElementString(categoryElement, decodingType)
                     : string.Empty;
                 var category = categories.FirstOrDefault(c => c.Name == categoryName);
                 if (category == null)
@@ -57,23 +74,28 @@ internal class ApiDataSerializer : IApiDataSerializer
                 }
                 var question = new TriviaQuestion()
                 {
-                    Type = questionElement.GetProperty("type").GetString() switch
+                    Type = DecodeJsonElementString(questionElement.GetProperty("type"), decodingType) switch
                     {
                         "multiple" => TriviaQuestionType.MultipleChoice,
                         "boolean" => TriviaQuestionType.TrueFalse,
+                        "bXVsdGlwbGU=" => TriviaQuestionType.MultipleChoice, // Base64 encoding for "multiple"
+                        "Ym9vbGVhbg==" => TriviaQuestionType.TrueFalse, // Base64 encoding for "boolean"
                         _ => throw new InvalidOperationException($"Unknown question type: {questionElement.GetProperty("type").GetString()}")
                     },
-                    Difficulty = questionElement.GetProperty("difficulty").GetString() switch
+                    Difficulty = DecodeJsonElementString(questionElement.GetProperty("difficulty"), decodingType) switch
                     {
                         "easy" => TriviaQuestionDifficulty.Easy,
                         "medium" => TriviaQuestionDifficulty.Medium,
                         "hard" => TriviaQuestionDifficulty.Hard,
+                        "ZWFzeQ==" => TriviaQuestionDifficulty.Easy, // Base64 encoding for "easy"
+                        "bWVkaXVt" => TriviaQuestionDifficulty.Medium, // Base64 encoding for "medium"
+                        "aGFyZA==" => TriviaQuestionDifficulty.Hard, // Base64 encoding for "hard"
                         _ => throw new InvalidOperationException($"Unknown question difficulty: {questionElement.GetProperty("difficulty").GetString()}")
                     },
                     Category = category,
-                    Question = questionElement.GetProperty("question").GetString()!,
-                    CorrectAnswer = questionElement.GetProperty("correct_answer").GetString()!,
-                    IncorrectAnswers = [.. questionElement.GetProperty("incorrect_answers").EnumerateArray().Select(a => a.GetString()!)]
+                    Question = DecodeJsonElementString(questionElement.GetProperty("question"), decodingType),
+                    CorrectAnswer = DecodeJsonElementString(questionElement.GetProperty("correct_answer"), decodingType),
+                    IncorrectAnswers = [.. questionElement.GetProperty("incorrect_answers").EnumerateArray().Select(a => DecodeJsonElementString(a, decodingType))]
                 };
                 questions.Add(question);
             }

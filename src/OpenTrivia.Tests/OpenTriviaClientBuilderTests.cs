@@ -7,6 +7,55 @@ namespace OpenTrivia.Tests;
 public class OpenTriviaClientBuilderTests
 {
     [TestMethod]
+    public void UseAutoDecoding_DefaultsToTrueWithNoArgument()
+    {
+        // Arrange
+        var autoDecode = true;
+        var builder = new OpenTriviaClientBuilder();
+        // Act
+        builder.UseAutoDecoding();
+
+        // Assert
+        Assert.AreEqual(autoDecode, builder.AutoDecode);
+    }
+
+    [TestMethod]
+    public void UseAutoDecoding_SetsAutoDecode()
+    {
+        // Arrange
+        var autoDecode = false;
+        var builder = new OpenTriviaClientBuilder();
+        // Act
+        builder.UseAutoDecoding(autoDecode);
+
+        // Assert
+        Assert.AreEqual(autoDecode, builder.AutoDecode);
+    }
+
+    [TestMethod]
+    public void WithEncoding_SetsEncodingType()
+    {
+        // Arrange
+        var encodingType = ApiEncodingType.Base64;
+        var builder = new OpenTriviaClientBuilder();
+        // Act
+        builder.WithEncoding(encodingType);
+        // Assert
+        Assert.AreEqual(encodingType, builder.EncodingType);
+    }
+
+    [TestMethod]
+    public void WithEncoding_DefaultsToNull()
+    {
+        // Arrange
+        var builder = new OpenTriviaClientBuilder();
+        // Act
+        var encodingType = builder.EncodingType;
+        // Assert
+        Assert.IsNull(encodingType);
+    }
+
+    [TestMethod]
     public void ManageRateLimit_SetsManageRateLimit()
     {
         // Arrange
@@ -166,7 +215,7 @@ public class OpenTriviaClientBuilderTests
         public ApiResponseCode GetResponseCode(JsonDocument document)
             => throw new NotImplementedException();
 
-        public List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document)
+        public List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document, ApiEncodingType? encodingType)
             => throw new NotImplementedException();
 
         public List<TriviaCategory> DeserializeTriviaCategories(JsonDocument document)
