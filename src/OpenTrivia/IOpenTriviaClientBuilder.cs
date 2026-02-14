@@ -55,7 +55,7 @@ public interface IOpenTriviaClientBuilder
     /// <remarks>
     /// Automatic decoding converts API responses from their encoded format (e.g., Base64) to a human-readable format. This
     /// takes place regardless of the encoding type specified for API communication, ensuring that the client can handle responses
-    /// appropriately without requiring manual decoding by the caller. In cases where an explicit encodeing
+    /// appropriately without requiring manual decoding by the caller. In cases where an explicit encoding
     /// is specified in a method call, that encoding will be used; otherwise, the configured encoding type for the client
     /// is used if set, or the default encoding behavior of the API is applied. This allows for flexible handling of API responses while ensuring that the
     /// configured encoding is used.
