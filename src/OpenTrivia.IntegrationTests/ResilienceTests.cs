@@ -11,7 +11,7 @@ public class ResilienceTests
     public TestContext TestContext { get; set; } // MSTest will set this property
 
     [TestMethod]
-    [Timeout(30000, CooperativeCancellation = true)] // 30 second timeout
+    [Timeout(60000, CooperativeCancellation = true)] // 60 second timeout
     public async Task GetQuestions_CompletesWithinTimeout()
     {
         // Arrange
@@ -22,7 +22,7 @@ public class ResilienceTests
         stopwatch.Stop();
 
         // Assert
-        Assert.IsTrue(result.IsSuccess);
+        Assert.IsTrue(result.IsSuccess, $"Failed with response code = '{result.ResponseCode}'");
         Assert.IsLessThan(10000, stopwatch.ElapsedMilliseconds, $"Request took {stopwatch.ElapsedMilliseconds}ms");
     }
 

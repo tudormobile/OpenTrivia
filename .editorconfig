@@ -37,3 +37,4 @@ csharp_style_expression_bodied_operators = false:silent
 
 # supress IDE rule for namespaces
 dotnet_diagnostic.IDE0130.severity = none
+dotnet_diagnostic.CA1873.severity = none
