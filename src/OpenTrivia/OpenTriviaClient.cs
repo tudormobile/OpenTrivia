@@ -14,6 +14,8 @@ internal class OpenTriviaClient : IOpenTriviaClient
     private readonly IApiDataSerializer _serializer;
     private DateTime _lastQuestionRequestTime = DateTime.MinValue;
     private readonly SemaphoreSlim _rateLimitSemaphore = new(1, 1);
+    private readonly bool _autoDecode;
+    private readonly ApiEncodingType? _encodingType;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenTriviaClient"/> class.
@@ -22,15 +24,19 @@ internal class OpenTriviaClient : IOpenTriviaClient
     /// <param name="logger">Optional logger instance for logging diagnostic information. If null, a NullLogger will be used.</param>
     /// <param name="serializer">Optional serializer instance for serializing and deserializing API data. If null, the internal serializer will be used.</param>
     /// <param name="manageRateLimit">Automatically manage rate limits.</param>
+    /// <param name="autoDecode">Automatically decode API responses.</param>
+    /// <param name="encodingType">The encoding type to use for API requests.</param>
     internal OpenTriviaClient(HttpClient httpClient,
         ILogger? logger = null,
         IApiDataSerializer? serializer = null,
-        bool manageRateLimit = false)
+        bool manageRateLimit = false, bool autoDecode = false, ApiEncodingType? encodingType = null)
     {
         _httpClient = httpClient;
         _manageRateLimit = manageRateLimit;
         _logger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance;
         _serializer = serializer ?? new ApiDataSerializer();
+        _autoDecode = autoDecode;
+        _encodingType = encodingType;
     }
 
     /// <summary>
@@ -81,9 +87,22 @@ internal class OpenTriviaClient : IOpenTriviaClient
         }
 
         // Encoding
+        ApiEncodingType decodingType = _encodingType ?? ApiEncodingType.Default;
         if (encoding is not null)
         {
-            uriString += $"&encode={encoding.ToString()!.ToLower()}";
+            decodingType = encoding.Value;
+            if (encoding.Value != ApiEncodingType.Default)
+            {
+                uriString += $"&encode={encoding.ToString()!.ToLower()}";
+            }
+        }
+        else if (_encodingType is not null)
+        {
+            decodingType = _encodingType.Value;
+            if (_encodingType.Value != ApiEncodingType.Default)
+            {
+                uriString += $"&encode={_encodingType.ToString()!.ToLower()}";
+            }
         }
 
         // Token
@@ -124,7 +143,12 @@ internal class OpenTriviaClient : IOpenTriviaClient
             }
         }
 
-        return await GetApiResult(uriString, _serializer.DeserializeTriviaQuestions, cancellationToken);
+        // Auto-decode
+        Func<JsonDocument, List<TriviaQuestion>> resultBuilder = _autoDecode
+            ? doc => _serializer.DeserializeTriviaQuestions(doc, decodingType)
+            : doc => _serializer.DeserializeTriviaQuestions(doc);
+
+        return GetApiResult(uriString, resultBuilder, cancellationToken);
     }
 
     /// <inheritdoc/>
