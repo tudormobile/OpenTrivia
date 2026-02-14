@@ -88,13 +88,19 @@ internal class OpenTriviaClient : IOpenTriviaClient
         ApiEncodingType decodingType = _encodingType ?? ApiEncodingType.Default;
         if (encoding is not null)
         {
-            uriString += $"&encode={encoding.ToString()!.ToLower()}";
             decodingType = encoding.Value;
+            if (encoding.Value != ApiEncodingType.Default)
+            {
+                uriString += $"&encode={encoding.ToString()!.ToLower()}";
+            }
         }
         else if (_encodingType is not null)
         {
-            uriString += $"&encode={_encodingType.ToString()!.ToLower()}";
             decodingType = _encodingType.Value;
+            if (_encodingType.Value != ApiEncodingType.Default)
+            {
+                uriString += $"&encode={_encodingType.ToString()!.ToLower()}";
+            }
         }
 
         // Token
