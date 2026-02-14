@@ -336,4 +336,427 @@ public class OpenTriviaClientTests
         Assert.HasCount(0, response.Data);
     }
 
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithDefaultEncoding_ReturnsEncodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""boolean"",
+      ""difficulty"": ""medium"",
+      ""category"": ""Entertainment: Video Games"",
+      ""question"": ""The first Maxis game to feature the fictional language &quot;Simlish&quot; was The Sims (2000)."",
+      ""correct_answer"": ""False"",
+      ""incorrect_answers"": [
+        ""True""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, encodingType: null);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.Contains("&quot;", response.Data[0].Question);
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithDefaultEncodingAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""boolean"",
+      ""difficulty"": ""medium"",
+      ""category"": ""Entertainment: Video Games"",
+      ""question"": ""The first Maxis game to feature the fictional language &quot;Simlish&quot; was The Sims (2000)."",
+      ""correct_answer"": ""False"",
+      ""incorrect_answers"": [
+        ""True""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true, encodingType: null);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.Contains(" \"Simlish\" ", response.Data[0].Question, "Failed to decode the question");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithBase64Encoding_ReturnsBase64Response()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""bXVsdGlwbGU="",
+      ""difficulty"": ""ZWFzeQ=="",
+      ""category"": ""U2NpZW5jZSAmIE5hdHVyZQ=="",
+      ""question"": ""V2hpY2ggb2YgdGhlIGZvbGxvd2luZyBibG9vZCB2ZXNzZWxzIGNhcnJpZXMgZGVveHlnZW5hdGVkIGJsb29kPw=="",
+      ""correct_answer"": ""UHVsbW9uYXJ5IEFydGVyeQ=="",
+      ""incorrect_answers"": [
+        ""UHVsbW9uYXJ5IFZlaW4="",
+        ""QW9ydGE="",
+        ""Q29yb25hcnkgQXJ0ZXJ5""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, encodingType: ApiEncodingType.Base64);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.AreEqual("V2hpY2ggb2YgdGhlIGZvbGxvd2luZyBibG9vZCB2ZXNzZWxzIGNhcnJpZXMgZGVveHlnZW5hdGVkIGJsb29kPw==", response.Data[0].Question, "Failed to return the base64 encoded question");
+        Assert.AreEqual("UHVsbW9uYXJ5IEFydGVyeQ==", response.Data[0].CorrectAnswer, "Failed to return the base64 encoded correct answer");
+        Assert.AreEqual("UHVsbW9uYXJ5IFZlaW4=", response.Data[0].IncorrectAnswers[0], "Failed to return the base64 encoded incorrect answer 1");
+        Assert.AreEqual("QW9ydGE=", response.Data[0].IncorrectAnswers[1], "Failed to return the base64 encoded incorrect answer 2");
+        Assert.AreEqual("Q29yb25hcnkgQXJ0ZXJ5", response.Data[0].IncorrectAnswers[2], "Failed to return the base64 encoded incorrect answer 3");
+
+    }
+
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithBase64EncodingAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""bXVsdGlwbGU="",
+      ""difficulty"": ""ZWFzeQ=="",
+      ""category"": ""U2NpZW5jZSAmIE5hdHVyZQ=="",
+      ""question"": ""V2hpY2ggb2YgdGhlIGZvbGxvd2luZyBibG9vZCB2ZXNzZWxzIGNhcnJpZXMgZGVveHlnZW5hdGVkIGJsb29kPw=="",
+      ""correct_answer"": ""UHVsbW9uYXJ5IEFydGVyeQ=="",
+      ""incorrect_answers"": [
+        ""UHVsbW9uYXJ5IFZlaW4="",
+        ""QW9ydGE="",
+        ""Q29yb25hcnkgQXJ0ZXJ5""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true, encodingType: ApiEncodingType.Base64);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.AreEqual("Which of the following blood vessels carries deoxygenated blood?", response.Data[0].Question, "Failed to return the decoded question");
+        Assert.AreEqual("Pulmonary Artery", response.Data[0].CorrectAnswer, "Failed to return the decoded correct answer");
+        Assert.AreEqual("Pulmonary Vein", response.Data[0].IncorrectAnswers[0], "Failed to return the decoded incorrect answer 1");
+        Assert.AreEqual("Aorta", response.Data[0].IncorrectAnswers[1], "Failed to return the decoded incorrect answer 2");
+        Assert.AreEqual("Coronary Artery", response.Data[0].IncorrectAnswers[2], "Failed to return the decoded incorrect answer 3");
+
+        Assert.AreEqual("Science & Nature", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Easy, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.MultipleChoice, response.Data[0].Type, "Failed to return the decoded question type");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithClientDefaultEncodingAndMethodBase64EncodingAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""bXVsdGlwbGU="",
+      ""difficulty"": ""ZWFzeQ=="",
+      ""category"": ""U2NpZW5jZSAmIE5hdHVyZQ=="",
+      ""question"": ""V2hpY2ggb2YgdGhlIGZvbGxvd2luZyBibG9vZCB2ZXNzZWxzIGNhcnJpZXMgZGVveHlnZW5hdGVkIGJsb29kPw=="",
+      ""correct_answer"": ""UHVsbW9uYXJ5IEFydGVyeQ=="",
+      ""incorrect_answers"": [
+        ""UHVsbW9uYXJ5IFZlaW4="",
+        ""QW9ydGE="",
+        ""Q29yb25hcnkgQXJ0ZXJ5""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true, encodingType: ApiEncodingType.Default); // use different value from the method call below.
+
+        // Act
+        var response = await client.GetQuestionsAsync(1, encoding: ApiEncodingType.Base64, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.AreEqual("Which of the following blood vessels carries deoxygenated blood?", response.Data[0].Question, "Failed to return the decoded question");
+        Assert.AreEqual("Pulmonary Artery", response.Data[0].CorrectAnswer, "Failed to return the decoded correct answer");
+        Assert.AreEqual("Pulmonary Vein", response.Data[0].IncorrectAnswers[0], "Failed to return the decoded incorrect answer 1");
+        Assert.AreEqual("Aorta", response.Data[0].IncorrectAnswers[1], "Failed to return the decoded incorrect answer 2");
+        Assert.AreEqual("Coronary Artery", response.Data[0].IncorrectAnswers[2], "Failed to return the decoded incorrect answer 3");
+
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithUrl3986EncodingAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""boolean"",
+      ""difficulty"": ""medium"",
+      ""category"": ""Entertainment%3A%20Music"",
+      ""question"": ""The%20music%20group%20Daft%20Punk%20got%20their%20name%20from%20a%20negative%20review%20they%20received."",
+      ""correct_answer"": ""True"",
+      ""incorrect_answers"": [
+        ""False""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true, encodingType: ApiEncodingType.Url3986);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1,
+            type: TriviaQuestionType.TrueFalse,
+            difficulty: TriviaQuestionDifficulty.Medium,
+            cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+
+        Assert.AreEqual("Entertainment: Music", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Medium, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithUrl3986EncodingAndHardDifficultyAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""boolean"",
+      ""difficulty"": ""hard"",
+      ""category"": ""Entertainment%3A%20Music"",
+      ""question"": ""The%20music%20group%20Daft%20Punk%20got%20their%20name%20from%20a%20negative%20review%20they%20received."",
+      ""correct_answer"": ""True"",
+      ""incorrect_answers"": [
+        ""False""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1,
+            type: TriviaQuestionType.TrueFalse,
+            difficulty: TriviaQuestionDifficulty.Hard,
+            encoding: ApiEncodingType.Url3986,
+            cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.AreEqual("Entertainment: Music", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Hard, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithBase64EncodingAndMediumAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""Ym9vbGVhbg=="",
+      ""difficulty"": ""bWVkaXVt"",
+      ""category"": ""TXl0aG9sb2d5"",
+      ""question"": ""QWNjb3JkaW5nIHRvIE5vcnNlIG15dGhvbG9neSwgTG9raSBpcyBhIG1vdGhlci4="",
+      ""correct_answer"": ""VHJ1ZQ=="",
+      ""incorrect_answers"": [
+        ""RmFsc2U=""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true, encodingType: ApiEncodingType.Base64);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1,
+            type: TriviaQuestionType.TrueFalse,
+            difficulty: TriviaQuestionDifficulty.Medium,
+            cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+
+        Assert.AreEqual("Mythology", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Medium, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithBase64EncodingAndHardDifficultyAndAutoDecode_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""Ym9vbGVhbg=="",
+      ""difficulty"": ""aGFyZA=="",
+      ""category"": ""RW50ZXJ0YWlubWVudDogQ2FydG9vbiAmIEFuaW1hdGlvbnM="",
+      ""question"": ""U25hZ2dsZXB1c3Mgd2FzIHBhcnQgb2YgdGhlIFlvZ2kgWWFob29pZXMgaW4gdGhlIDE5Nzcgc2hvdyBTY29vYnkncyBBbGwtU3RhciBMYWZmLWEtTHltcGljcy4="",
+      ""correct_answer"": ""RmFsc2U="",
+      ""incorrect_answers"": [
+        ""VHJ1ZQ==""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: true);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1,
+            type: TriviaQuestionType.TrueFalse,
+            difficulty: TriviaQuestionDifficulty.Hard,
+            encoding: ApiEncodingType.Base64,
+            cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.AreEqual("Entertainment: Cartoon & Animations", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Hard, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithBase64EncodingAndMedium_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""Ym9vbGVhbg=="",
+      ""difficulty"": ""bWVkaXVt"",
+      ""category"": ""TXl0aG9sb2d5"",
+      ""question"": ""QWNjb3JkaW5nIHRvIE5vcnNlIG15dGhvbG9neSwgTG9raSBpcyBhIG1vdGhlci4="",
+      ""correct_answer"": ""VHJ1ZQ=="",
+      ""incorrect_answers"": [
+        ""RmFsc2U=""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: false, encodingType: ApiEncodingType.Base64);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1,
+            type: TriviaQuestionType.TrueFalse,
+            difficulty: TriviaQuestionDifficulty.Medium,
+            cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+
+        Assert.AreEqual("TXl0aG9sb2d5", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Medium, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionsWithBase64EncodingAndHardDifficulty_ReturnsDecodedResponse()
+    {
+        // Arrange
+        var json = @"{
+  ""response_code"": 0,
+  ""results"": [
+    {
+      ""type"": ""Ym9vbGVhbg=="",
+      ""difficulty"": ""aGFyZA=="",
+      ""category"": ""RW50ZXJ0YWlubWVudDogQ2FydG9vbiAmIEFuaW1hdGlvbnM="",
+      ""question"": ""U25hZ2dsZXB1c3Mgd2FzIHBhcnQgb2YgdGhlIFlvZ2kgWWFob29pZXMgaW4gdGhlIDE5Nzcgc2hvdyBTY29vYnkncyBBbGwtU3RhciBMYWZmLWEtTHltcGljcy4="",
+      ""correct_answer"": ""RmFsc2U="",
+      ""incorrect_answers"": [
+        ""VHJ1ZQ==""
+      ]
+    }
+  ]
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient, autoDecode: false);
+
+        // Act
+        var response = await client.GetQuestionsAsync(1,
+            type: TriviaQuestionType.TrueFalse,
+            difficulty: TriviaQuestionDifficulty.Hard,
+            encoding: ApiEncodingType.Base64,
+            cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.HasCount(1, response.Data);
+        Assert.AreEqual("RW50ZXJ0YWlubWVudDogQ2FydG9vbiAmIEFuaW1hdGlvbnM=", response.Data[0].Category.Name, "Failed to return the decoded category");
+        Assert.AreEqual(TriviaQuestionDifficulty.Hard, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
+        Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
+    }
 }

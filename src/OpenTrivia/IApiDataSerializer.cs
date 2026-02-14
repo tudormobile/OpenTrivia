@@ -18,8 +18,9 @@ public interface IApiDataSerializer
     /// Deserializes a collection of trivia questions from a JSON document.
     /// </summary>
     /// <param name="document">The JSON document containing the trivia questions data.</param>
+    /// <param name="decodingType">The optional encoding type to use for decoding the trivia questions.</param>
     /// <returns>A list of <see cref="TriviaQuestion"/> objects parsed from the response.</returns>
-    List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document);
+    List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document, ApiEncodingType? decodingType = null);
 
     /// <summary>
     /// Deserializes a collection of trivia categories from a JSON document.
