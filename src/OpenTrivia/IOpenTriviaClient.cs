@@ -19,7 +19,7 @@ public interface IOpenTriviaClient
     /// <remarks>
     /// If an encodingType is provided, it will be used when not explicitly provided to method calls.
     /// If autoDecode is enabled, the client will attempt to decode API responses using the specified encoding type or the default encoding if none is specified. If autoDecode is disabled, the client will return raw API responses without decoding.
-    /// When autoDecode is not enabled (default behavior_, the client will return raw API responses without decoding, regardless of the specified encoding type.
+    /// When autoDecode is not enabled (default behavior), the client will return raw API responses without decoding, regardless of the specified encoding type.
     /// This allows you to specify the encoding and manage rate limits without automatically decoding responses, giving you more control over how you handle API data.
     /// </remarks>
     public static IOpenTriviaClient Create(HttpClient httpClient,
