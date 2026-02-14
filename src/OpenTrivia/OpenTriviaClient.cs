@@ -12,6 +12,8 @@ internal class OpenTriviaClient : IOpenTriviaClient
     private readonly bool _manageRateLimit;
     private readonly ILogger _logger;
     private readonly IApiDataSerializer _serializer;
+    private DateTime _lastQuestionRequestTime = DateTime.MinValue;
+    private readonly SemaphoreSlim _rateLimitSemaphore = new(1, 1);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenTriviaClient"/> class.
@@ -52,7 +54,7 @@ internal class OpenTriviaClient : IOpenTriviaClient
         => GetApiResult($"{ApiConstants.TokenUrl}?command=reset&token={token}", _serializer.DeserializeSessionToken, cancellationToken);
 
     /// <inheritdoc/>
-    public Task<ApiResponse<List<TriviaQuestion>>> GetQuestionsAsync(int amount, TriviaCategory? category = null, TriviaQuestionDifficulty? difficulty = null, TriviaQuestionType? type = null, ApiEncodingType? encoding = null, ApiSessionToken? token = null, CancellationToken cancellationToken = default)
+    public async Task<ApiResponse<List<TriviaQuestion>>> GetQuestionsAsync(int amount, TriviaCategory? category = null, TriviaQuestionDifficulty? difficulty = null, TriviaQuestionType? type = null, ApiEncodingType? encoding = null, ApiSessionToken? token = null, CancellationToken cancellationToken = default)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount, nameof(amount));
         ArgumentOutOfRangeException.ThrowIfGreaterThan(amount, ApiConstants.MaxAmount, nameof(amount));
@@ -90,7 +92,39 @@ internal class OpenTriviaClient : IOpenTriviaClient
             uriString += $"&token={token.Token}";
         }
 
-        return GetApiResult(uriString, _serializer.DeserializeTriviaQuestions, cancellationToken);
+        if (_manageRateLimit)
+        {
+            await _rateLimitSemaphore.WaitAsync(cancellationToken);
+            try
+            {
+                var timeSinceLastRequest = DateTime.UtcNow - _lastQuestionRequestTime;
+                var rateLimitDuration = TimeSpan.FromSeconds(ApiConstants.RateLimitSeconds);
+
+                if (timeSinceLastRequest < rateLimitDuration)
+                {
+                    var delay = rateLimitDuration - timeSinceLastRequest;
+                    _logger.LogDebug("Rate limit active. Waiting {Delay}ms before making request", delay.TotalMilliseconds);
+                    await Task.Delay(delay, cancellationToken);
+                }
+
+                _lastQuestionRequestTime = DateTime.UtcNow;
+            }
+            catch (TaskCanceledException ex)
+            {
+                _logger.LogWarning(ex, "Rate limit delay was canceled");
+                return new ApiResponse<List<TriviaQuestion>>(error: new ApiException("Rate limit delay was canceled", ex))
+                {
+                    ResponseCode = ApiResponseCode.Unknown,
+                    StatusCode = 499 // Client Closed Request (non-standard, but commonly used to indicate a client-side cancellation)
+                };
+            }
+            finally
+            {
+                _rateLimitSemaphore.Release();
+            }
+        }
+
+        return await GetApiResult(uriString, _serializer.DeserializeTriviaQuestions, cancellationToken);
     }
 
     /// <inheritdoc/>

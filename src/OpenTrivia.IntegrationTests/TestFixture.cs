@@ -34,7 +34,7 @@ public class TestFixture
         };
 
         // Create a shared OpenTriviaClient
-        _sharedClient = IOpenTriviaClient.Create(_sharedHttpClient);
+        _sharedClient = IOpenTriviaClient.Create(_sharedHttpClient, manageRateLimit: true);
 
         context.WriteLine("Integration test assembly initialized");
         context.WriteLine($"Using real OpenTrivia API at: {ApiConstants.BaseQuestionUrl}");
