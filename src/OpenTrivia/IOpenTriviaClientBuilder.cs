@@ -71,5 +71,6 @@ public interface IOpenTriviaClientBuilder
     /// Specifies the encoding type to use for API communication. This setting determines how the client 
     /// encodes requests and decodes responses when an explicit encoding is not specified in a method
     /// call.
+    /// </remarks>
     IOpenTriviaClientBuilder WithEncoding(ApiEncodingType encodingType);
 }

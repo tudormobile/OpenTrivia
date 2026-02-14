@@ -113,9 +113,9 @@ internal class OpenTriviaClient : IOpenTriviaClient
 
         if (_manageRateLimit)
         {
-            await _rateLimitSemaphore.WaitAsync(cancellationToken);
             try
             {
+                await _rateLimitSemaphore.WaitAsync(cancellationToken);
                 var timeSinceLastRequest = DateTime.UtcNow - _lastQuestionRequestTime;
                 var rateLimitDuration = TimeSpan.FromSeconds(ApiConstants.RateLimitSeconds);
 
@@ -148,7 +148,7 @@ internal class OpenTriviaClient : IOpenTriviaClient
             ? doc => _serializer.DeserializeTriviaQuestions(doc, decodingType)
             : doc => _serializer.DeserializeTriviaQuestions(doc);
 
-        return GetApiResult(uriString, resultBuilder, cancellationToken);
+        return await GetApiResult(uriString, resultBuilder, cancellationToken);
     }
 
     /// <inheritdoc/>

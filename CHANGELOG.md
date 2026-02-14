@@ -12,12 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for additional API endpoints (e.g., question count, global question count)
 - Enhanced documentation with more discussion, examples, and best practices
 
-## [1.0.0]
+## [1.0.0] - 2026-02-14
+
 ### Added
 - Integration test suite
 - Additional configuration options for `OpenTriviaClient`
 - Automatic decoding of questions and answers based on encoding type
-- Automatic rate limiting retries
+- Improved automatic rate-limit management across all endpoints
 
 ## [0.9.0] - 2026-02-12
 
