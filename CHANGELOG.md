@@ -8,13 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Automatic rate limiting retries
+- Additional sample applications (e.g., WPF, ASP.NET Core Web API, Blazor WebAssembly)
+- Support for additional API endpoints (e.g., question count, global question count)
+- Enhanced documentation with more discussion, examples, and best practices
 
-## [0.9.x]
+## [1.0.0]
 ### Added
 - Integration test suite
 - Additional configuration options for `OpenTriviaClient`
 - Automatic decoding of questions and answers based on encoding type
+- Automatic rate limiting retries
 
 ## [0.9.0] - 2026-02-12
 
