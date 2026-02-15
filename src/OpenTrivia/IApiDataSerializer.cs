@@ -30,6 +30,13 @@ public interface IApiDataSerializer
     List<TriviaCategory> DeserializeTriviaCategories(JsonDocument document);
 
     /// <summary>
+    /// Deserializes the count of trivia questions from a JSON document.
+    /// </summary>
+    /// <param name="document">The JSON document containing the trivia questions count data.</param>
+    /// <returns>A <see cref="TriviaQuestionCount"/> object parsed from the response.</returns>
+    TriviaQuestionCount DeserializeTriviaQuestionCount(JsonDocument document);
+
+    /// <summary>
     /// Deserializes a session token from a JSON document.
     /// </summary>
     /// <param name="document">The JSON document containing the session token data.</param>

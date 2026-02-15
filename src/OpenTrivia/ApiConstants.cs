@@ -21,6 +21,11 @@ public static class ApiConstants
     public const string CategoryUrl = "https://opentdb.com/api_category.php";
 
     /// <summary>
+    /// The URL for retrieving the count of trivia questions from the Open Trivia Database API.
+    /// </summary>
+    public const string QuestionCountUrl = "https://opentdb.com/api_count.php";
+
+    /// <summary>
     /// The API version currently in use.
     /// </summary>
     public const int ApiRevision = 0;

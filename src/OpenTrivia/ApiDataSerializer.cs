@@ -34,21 +34,6 @@ internal class ApiDataSerializer : IApiDataSerializer
         return categories;
     }
 
-    private static string DecodeJsonElementString(JsonElement jsonElement, ApiEncodingType? encodingType)
-    {
-        var value = jsonElement.GetString()!;
-        if (encodingType.HasValue)
-        {
-            value = encodingType.Value switch
-            {
-                ApiEncodingType.Url3986 => Uri.UnescapeDataString(value),
-                ApiEncodingType.Base64 => Encoding.UTF8.GetString(Convert.FromBase64String(value)),
-                _ => HttpUtility.HtmlDecode(value)
-            };
-        }
-        return value;
-    }
-
     public List<TriviaQuestion> DeserializeTriviaQuestions(JsonDocument document, ApiEncodingType? decodingType = null)
     {
         var categoryId = 1;
@@ -103,6 +88,29 @@ internal class ApiDataSerializer : IApiDataSerializer
         return questions;
     }
 
+    public TriviaQuestionCount DeserializeTriviaQuestionCount(JsonDocument document)
+    {
+        try
+        {
+            var questionCountObject = document.RootElement.GetProperty("category_question_count");
+            int total = questionCountObject.GetProperty("total_question_count").GetInt32();
+            int easy = questionCountObject.GetProperty("total_easy_question_count").GetInt32();
+            int medium = questionCountObject.GetProperty("total_medium_question_count").GetInt32();
+            int hard = questionCountObject.GetProperty("total_hard_question_count").GetInt32();
+            return new TriviaQuestionCount()
+            {
+                TotalQuestionCount = total,
+                EasyQuestionCount = easy,
+                MediumQuestionCount = medium,
+                HardQuestionCount = hard
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Failed to deserialize trivia question count. The JSON structure may have changed.", ex);
+        }
+    }
+
     public ApiResponseCode GetResponseCode(JsonDocument document)
     {
         var responseCode = document.RootElement.TryGetProperty("response_code", out var responseCodeProperty)
@@ -113,4 +121,20 @@ internal class ApiDataSerializer : IApiDataSerializer
                     : ApiResponseCode.Unknown;
         return responseCode;
     }
+
+    private static string DecodeJsonElementString(JsonElement jsonElement, ApiEncodingType? encodingType)
+    {
+        var value = jsonElement.GetString()!;
+        if (encodingType.HasValue)
+        {
+            value = encodingType.Value switch
+            {
+                ApiEncodingType.Url3986 => Uri.UnescapeDataString(value),
+                ApiEncodingType.Base64 => Encoding.UTF8.GetString(Convert.FromBase64String(value)),
+                _ => HttpUtility.HtmlDecode(value)
+            };
+        }
+        return value;
+    }
+
 }

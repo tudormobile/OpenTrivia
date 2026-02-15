@@ -6,6 +6,42 @@ namespace OpenTrivia.Tests;
 public class ApiDataSerializerTests
 {
     [TestMethod]
+    public void ApiDataSerializer_DeserializeTriviaQuestionCount_ReturnsQuestionCount()
+    {
+        // Arrange
+        var json = @"{
+            ""category_id"": 9,
+            ""category_question_count"": {
+                ""total_question_count"": 100,
+                ""total_easy_question_count"": 50,
+                ""total_medium_question_count"": 30,
+                ""total_hard_question_count"": 20
+            }
+        }";
+        var doc = JsonDocument.Parse(json);
+        var serializer = new ApiDataSerializer();
+        // Act
+        var questionCount = serializer.DeserializeTriviaQuestionCount(doc);
+        // Assert
+        Assert.AreEqual(100, questionCount.TotalQuestionCount);
+        Assert.AreEqual(50, questionCount.EasyQuestionCount);
+        Assert.AreEqual(30, questionCount.MediumQuestionCount);
+        Assert.AreEqual(20, questionCount.HardQuestionCount);
+    }
+
+    [TestMethod]
+    public void ApiDataSerializer_DeserializeTriviaQuestionCount_EmptyJson_Throws()
+    {
+        // Arrange
+        var json = @"{}";
+        var doc = JsonDocument.Parse(json);
+        var serializer = new ApiDataSerializer();
+
+        // Act & Assert
+        Assert.ThrowsExactly<InvalidOperationException>(() => serializer.DeserializeTriviaQuestionCount(doc));
+    }
+
+    [TestMethod]
     public void ApiDataSerializer_GetResponseCode_ReturnsSuccess()
     {
         // Arrange

@@ -162,6 +162,17 @@ internal class OpenTriviaClient : IOpenTriviaClient
         return result;
     }
 
+    /// <inheritdoc/>
+    public async Task<ApiResponse<TriviaQuestionCount>> GetQuestionCountAsync(TriviaCategory category, CancellationToken cancellationToken = default)
+    {
+        var uriString = $"{ApiConstants.QuestionCountUrl}?category={category.Id}";
+        var result = await GetApiResult(uriString, _serializer.DeserializeTriviaQuestionCount, cancellationToken);
+        result.ResponseCode = result.Data != null
+            ? ApiResponseCode.Success
+            : ApiResponseCode.NoResults;
+        return result;
+    }
+
     private async Task<ApiResponse<T>> GetApiResult<T>(string uriString, Func<JsonDocument, T> builder, CancellationToken cancellationToken)
     {
         try
