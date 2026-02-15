@@ -11,17 +11,17 @@ public record TriviaQuestionCount
     /// <summary>
     /// The total number of questions available for the specified category.
     /// </summary>
-    public int TotalQuestionCount { get; set; }
+    public int TotalQuestionCount { get; init; }
     /// <summary>
     /// The number of questions available for the specified category that are of "easy" difficulty.
     /// </summary>
-    public int EasyQuestionCount { get; set; }
+    public int EasyQuestionCount { get; init; }
     /// <summary>
     /// The number of questions available for the specified category that are of "medium" difficulty.
     /// </summary>
-    public int MediumQuestionCount { get; set; }
+    public int MediumQuestionCount { get; init; }
     /// <summary>
     /// The number of questions available for the specified category that are of "hard" difficulty.
     /// </summary>
-    public int HardQuestionCount { get; set; }
+    public int HardQuestionCount { get; init; }
 }
