@@ -167,9 +167,10 @@ internal class OpenTriviaClient : IOpenTriviaClient
     {
         var uriString = $"{ApiConstants.QuestionCountUrl}?category={category.Id}";
         var result = await GetApiResult(uriString, _serializer.DeserializeTriviaQuestionCount, cancellationToken);
-        result.ResponseCode = result.Data != null
-            ? ApiResponseCode.Success
-            : ApiResponseCode.NoResults;
+        if (result.Data != null)
+        {
+            result.ResponseCode = ApiResponseCode.Success;
+        }
         return result;
     }
 
