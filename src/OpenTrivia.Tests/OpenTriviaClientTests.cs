@@ -792,6 +792,7 @@ public class OpenTriviaClientTests
         Assert.AreEqual(73, response.Data.EasyQuestionCount);
         Assert.AreEqual(86, response.Data.MediumQuestionCount);
         Assert.AreEqual(30, response.Data.HardQuestionCount);
+        Assert.Contains("category=14", mockHandler.ProvidedRequestUri!.Query);
 
     }
 
