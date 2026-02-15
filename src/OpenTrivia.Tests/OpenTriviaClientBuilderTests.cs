@@ -223,5 +223,8 @@ public class OpenTriviaClientBuilderTests
 
         public ApiSessionToken DeserializeSessionToken(JsonDocument document)
             => throw new NotImplementedException();
+
+        public TriviaQuestionCount DeserializeTriviaQuestionCount(JsonDocument document)
+            => throw new NotImplementedException();
     }
 }

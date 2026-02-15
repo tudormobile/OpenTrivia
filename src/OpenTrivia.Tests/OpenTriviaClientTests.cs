@@ -759,4 +759,69 @@ public class OpenTriviaClientTests
         Assert.AreEqual(TriviaQuestionDifficulty.Hard, response.Data[0].Difficulty, "Failed to return the decoded difficulty");
         Assert.AreEqual(TriviaQuestionType.TrueFalse, response.Data[0].Type, "Failed to return the decoded question type");
     }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionCountAsync_ReturnsApiResult()
+    {
+        // Arrange
+        var json = @"{
+  ""category_id"": 14,
+  ""category_question_count"": {
+    ""total_question_count"": 189,
+    ""total_easy_question_count"": 73,
+    ""total_medium_question_count"": 86,
+    ""total_hard_question_count"": 30
+  }
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient);
+        var category = new TriviaCategory()
+        {
+            Id = 14,
+            Name = "Entertainment: Television"
+        };
+
+        // Act
+        var response = await client.GetQuestionCountAsync(category, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(response.IsSuccess);
+        Assert.IsNotNull(response.Data);
+        Assert.AreEqual(189, response.Data.TotalQuestionCount);
+        Assert.AreEqual(73, response.Data.EasyQuestionCount);
+        Assert.AreEqual(86, response.Data.MediumQuestionCount);
+        Assert.AreEqual(30, response.Data.HardQuestionCount);
+        Assert.Contains("category=14", mockHandler.ProvidedRequestUri!.Query);
+
+    }
+
+    [TestMethod]
+    public async Task OpenTriviaClient_GetQuestionCountAsync_WithInvalidJson_ReturnsApiResult()
+    {
+        // Arrange
+        var json = @"{
+  ""category_id"": 14,
+  ""category_question_count"": {
+    ""total_medium_question_count"": 86,
+    ""total_hard_question_count"": 30
+  }
+}";
+        using var mockHandler = new MockHttpMessageHandler() { JsonResponse = json };
+        using var httpClient = new HttpClient(mockHandler);
+        var client = new OpenTriviaClient(httpClient);
+        var category = new TriviaCategory()
+        {
+            Id = 14,
+            Name = "Entertainment: Television"
+        };
+
+        // Act
+        var response = await client.GetQuestionCountAsync(category, cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsFalse(response.IsSuccess);
+        Assert.IsNull(response.Data);
+    }
+
 }

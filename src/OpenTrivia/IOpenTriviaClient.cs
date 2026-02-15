@@ -71,4 +71,14 @@ public interface IOpenTriviaClient
         ApiSessionToken? token = null,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Asynchronously retrieves the total number of questions available in the system for a specific category.
+    /// </summary>
+    /// <param name="category">The category to filter by.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// An <see cref="ApiResponse{T}"/> containing the total count of questions for the specified category.
+    /// </returns>
+    Task<ApiResponse<TriviaQuestionCount>> GetQuestionCountAsync(TriviaCategory category, CancellationToken cancellationToken = default);
+
 }
