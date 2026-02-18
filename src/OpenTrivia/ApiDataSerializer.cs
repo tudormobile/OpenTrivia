@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Concurrent;
+using System.Text;
 using System.Text.Json;
 using System.Web;
 
@@ -6,6 +7,10 @@ namespace Tudormobile.OpenTrivia;
 
 internal class ApiDataSerializer : IApiDataSerializer
 {
+    // Caches category instances to ensure object reuse across API calls.
+    // Categories are stable and long-lived in the Open Trivia Database API.
+    private readonly ConcurrentDictionary<string, TriviaCategory> _categoryNames = [];
+
     public ApiSessionToken DeserializeSessionToken(JsonDocument document)
     {
         var token = document.RootElement.TryGetProperty("token", out var tokenProperty)
@@ -29,6 +34,7 @@ internal class ApiDataSerializer : IApiDataSerializer
                     Name = categoryElement.GetProperty("name").GetString()!
                 };
                 categories.Add(category);
+                _categoryNames[category.Name] = category;
             }
         }
         return categories;
@@ -65,11 +71,13 @@ internal class ApiDataSerializer : IApiDataSerializer
                 var category = categories.FirstOrDefault(c => c.Name == categoryName);
                 if (category == null)
                 {
-                    category = new TriviaCategory
-                    {
-                        Id = categoryId++,
-                        Name = categoryName
-                    };
+                    category = _categoryNames.TryGetValue(categoryName, out var existingCategory)
+                        ? existingCategory
+                        : new TriviaCategory
+                        {
+                            Id = categoryId++,
+                            Name = categoryName
+                        };
                     categories.Add(category);
                 }
                 var question = new TriviaQuestion()
