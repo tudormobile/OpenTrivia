@@ -35,6 +35,7 @@ csharp_style_expression_bodied_operators = false:silent
 
 # CA1000: Do not declare static members on generic types
 
-# supress IDE rule for namespaces
-dotnet_diagnostic.IDE0130.severity = none
+# supress some IDE rules
+dotnet_diagnostic.IDE0130.severity = none  # Namespace doesn't match folder
+dotnet_diagnostic.IDE0290.severity = none  # Not using primary constructors
 dotnet_diagnostic.CA1873.severity = none
