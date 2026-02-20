@@ -85,7 +85,7 @@ public partial class SelectableQuestion : ObservableObject
     /// <summary>
     /// Gets a value indicating whether the selected answer is correct. Returns <c>null</c> if no answer is selected;
     /// otherwise, returns <see langword="true"/> if the selected answer matches the correct answer, and <see
-    /// langword="false"/> if it does.
+    /// langword="false"/> if it does not.
     /// </summary>
     /// <remarks>This property evaluates the user's selected answer against the correct answer, providing a
     /// nullable boolean result that reflects the correctness of the selection.</remarks>
