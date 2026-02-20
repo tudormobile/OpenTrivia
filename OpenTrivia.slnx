@@ -2,9 +2,9 @@
   <Folder Name="/samples/">
     <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" />
     <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
-    <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" Id="cbf66748-b010-4633-8380-a17a3ed644c6" />
-    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" Id="8bc137b3-3fb8-436d-be63-5a43f5c77c00" />
-    <Project Path="samples/WpfSampleApp/WpfSampleApp.csproj" Id="03f7ec38-9c0e-4a5e-81f3-f7787ef4a004" />
+    <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" />
+    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
+    <Project Path="samples/WpfSampleApp/WpfSampleApp.csproj" />
   </Folder>
   <Project Path="src/OpenTrivia.IntegrationTests/OpenTrivia.IntegrationTests.csproj" />
   <Project Path="src/OpenTrivia.Tests/OpenTrivia.Tests.csproj" />
