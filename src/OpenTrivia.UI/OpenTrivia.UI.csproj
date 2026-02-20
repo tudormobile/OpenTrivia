@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tudormobile.$(MSBuildProjectName)</RootNamespace>
+    <Product>Tudormobile OpenTrivia UI Library</Product>
+    <Description>WPF UI library for accessing the Open Trivia Database API.</Description>
+    <!-- Package Properties -->
+    <Company>Tudormobile</Company>
+    <Authors>WH Tudor</Authors>
+    <Copyright>Copyright © 2026 Bill Tudor</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/tudormobile/OpenTrivia</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageTags>opentrivia;trivia;opentbd</PackageTags>
+    <PackageProjectUrl>https://tudormobile.github.io/OpenTrivia/</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/tudormobile/OpenTrivia/releases</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <!--<InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenTrivia\OpenTrivia.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+</Project>
