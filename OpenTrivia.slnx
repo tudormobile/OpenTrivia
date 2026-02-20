@@ -1,9 +1,11 @@
 <Solution>
   <Folder Name="/samples/">
-    <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" Id="cbf66748-b010-4633-8380-a17a3ed644c6" />
-    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" Id="8bc137b3-3fb8-436d-be63-5a43f5c77c00" />
+    <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" />
+    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
   </Folder>
-  <Project Path="src/OpenTrivia.IntegrationTests/OpenTrivia.IntegrationTests.csproj" Id="a2a0e0b7-9a0c-4c2c-9f8d-6e6a5e2c1d34" />
-  <Project Path="src/OpenTrivia.Tests/OpenTrivia.Tests.csproj" Id="ee263615-1833-448a-aef0-e91121fe972d" />
-  <Project Path="src/OpenTrivia/OpenTrivia.csproj" Id="eb5792df-699e-4374-bf8f-5f7e10127eac" />
+  <Project Path="src/OpenTrivia.IntegrationTests/OpenTrivia.IntegrationTests.csproj" />
+  <Project Path="src/OpenTrivia.Tests/OpenTrivia.Tests.csproj" />
+  <Project Path="src/OpenTrivia.UI.Tests/OpenTrivia.UI.Tests.csproj" />
+  <Project Path="src/OpenTrivia.UI/OpenTrivia.UI.csproj" />
+  <Project Path="src/OpenTrivia/OpenTrivia.csproj" />
 </Solution>

@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="OpenTrivia.UI.PrimaryColor">#FF6200EE</Color>
+    <Color x:Key="OpenTrivia.UI.SecondaryColor">#FF03DAC6</Color>
+    <Color x:Key="OpenTrivia.UI.AccentColor">#FFFF69B4</Color>
+
+    <SolidColorBrush x:Key="OpenTrivia.UI.PrimaryBrush" Color="{StaticResource OpenTrivia.UI.PrimaryColor}"/>
+    <SolidColorBrush x:Key="OpenTrivia.UI.SecondaryBrush" Color="{StaticResource OpenTrivia.UI.SecondaryColor}"/>
+    <SolidColorBrush x:Key="OpenTrivia.UI.AccentBrush" Color="{StaticResource OpenTrivia.UI.AccentColor}"/>
+
+</ResourceDictionary>
