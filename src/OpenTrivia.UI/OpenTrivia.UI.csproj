@@ -24,7 +24,6 @@
     <PackageTags>opentrivia;trivia;opentbd</PackageTags>
     <PackageProjectUrl>https://tudormobile.github.io/OpenTrivia/</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/tudormobile/OpenTrivia/releases</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/tudormobile/OpenTrivia</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
