@@ -2,8 +2,6 @@
   <Folder Name="/samples/">
     <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" />
     <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
-    <Project Path="samples/ExtendedConsoleApp/ExtendedConsoleApp.csproj" />
-    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
     <Project Path="samples/WpfSampleApp/WpfSampleApp.csproj" />
   </Folder>
   <Project Path="src/OpenTrivia.IntegrationTests/OpenTrivia.IntegrationTests.csproj" />
