@@ -211,7 +211,7 @@ public class GameViewModelTests
     }
 
     [TestMethod]
-    public void GameViewModel_SelectQuestion_DeselctsOtherSelection()
+    public void GameViewModel_SelectQuestion_DeselectsOtherSelection()
     {
         // Arrange
         var triviaQuestions = new[]
