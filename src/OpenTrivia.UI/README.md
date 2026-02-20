@@ -8,7 +8,7 @@
 dotnet add package Tudormobile.OpenTrivia.UI
 ```
 ### Prerequisites
-Tudormobile.OpenTrivia (will be automatically installed as a dependency) requires .NET 6.0 or later.
+Tudormobile.OpenTrivia (will be automatically installed as a dependency) requires .NET 10.0 or later.
 
 ### Dependencies
 CommunityToolkit.Mvvm
