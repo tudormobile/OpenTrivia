@@ -7,6 +7,10 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="OpenTrivia.UI.Tests" />
+  </ItemGroup>
+
   <PropertyGroup>
     <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Tudormobile.$(MSBuildProjectName)</RootNamespace>

@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tudormobile.OpenTrivia.UI"
+        xmlns:models="clr-namespace:Tudormobile.OpenTrivia.UI.ViewModels"
+        xmlns:trivia="clr-namespace:Tudormobile.OpenTrivia;assembly=Tudormobile.OpenTrivia"
         mc:Ignorable="d"
-        Title="DesignPreview" Height="450" Width="800">
+        Title="DesignPreview" Height="2450" Width="800">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -42,6 +44,44 @@
                         </Rectangle.Fill>
                     </Rectangle>
                     <TextBlock Text="AccentColor" Margin="5,0" VerticalAlignment="Center" />
+                </WrapPanel>
+            </GroupBox>
+            <!-- DataTemplates -->
+            <GroupBox Header="DataTemplates" Margin="0,0,0,10">
+                <StackPanel>
+                    <!-- Preview Question Template -->
+                    <TextBlock Text="Question Template:" FontWeight="SemiBold" Margin="0,5"/>
+                    <ContentControl ContentTemplate="{StaticResource OpenTrivia.UI.QuestionTemplate}" 
+                                    Content="{x:Static local:DesignTimeData.SampleQuestion}"/>
+
+                    <!-- Preview Answers Template -->
+                    <TextBlock Text="Answers Template:" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <ContentControl ContentTemplate="{StaticResource OpenTrivia.UI.AnswersTemplate}" 
+                                    Content="{x:Static local:DesignTimeData.SampleQuestion}"/>
+
+                    <!-- Preview Composite Template -->
+                    <TextBlock Text="Question with Answers Template (Composite):" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <ContentControl ContentTemplate="{StaticResource OpenTrivia.UI.QuestionWithAnswersTemplate}" 
+                                    Content="{x:Static local:DesignTimeData.SampleQuestion}"/>
+
+                    <!-- Preview Category Template -->
+                    <TextBlock Text="Category Template: (selected/unselected)" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <ContentControl ContentTemplate="{StaticResource OpenTrivia.UI.CategoryTemplate}" 
+                                    Content="{x:Static local:DesignTimeData.SampleCategory}"/>
+                    <ContentControl ContentTemplate="{StaticResource OpenTrivia.UI.CategoryTemplate}" 
+                                    Content="{x:Static local:DesignTimeData.SampleCategoryUnselected}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Button Styles" Margin="0,0,0,10">
+                <WrapPanel>
+                    <!-- Primary Button -->
+                    <Button Width="100" Margin="10" Content="Submit" Style="{StaticResource OpenTrivia.UI.ModernButton}"/>
+
+                    <!-- Outline Button -->
+                    <Button Width="100" Margin="10" Content="Cancel" Style="{StaticResource OpenTrivia.UI.OutlineButton}"/>
+
+                    <!-- Text Button -->
+                    <Button Width="100" Margin="10" Content="Learn More" Style="{StaticResource OpenTrivia.UI.TextButton}"/>
                 </WrapPanel>
             </GroupBox>
         </StackPanel>
