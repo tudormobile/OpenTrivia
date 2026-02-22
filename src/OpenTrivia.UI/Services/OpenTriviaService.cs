@@ -30,11 +30,14 @@ internal class OpenTriviaService : IOpenTriviaService
         try
         {
             var categories = await _client.GetCategoriesAsync(cancellationToken);
-            _categoriesInitialized = true;
 
-            return categories.IsSuccess && categories.Data is not null
-                ? ServiceResult.Success((IReadOnlyList<TriviaCategory>)categories.Data.AsReadOnly())
-                : ServiceResult.Failure<IReadOnlyList<TriviaCategory>>(categories.ErrorMessage ?? "Failed to fetch categories", categories.Error);
+            if (categories.IsSuccess && categories.Data is not null)
+            {
+                _categoriesInitialized = true;
+                return ServiceResult.Success((IReadOnlyList<TriviaCategory>)categories.Data.AsReadOnly());
+            }
+
+            return ServiceResult.Failure<IReadOnlyList<TriviaCategory>>(categories.ErrorMessage ?? "Failed to fetch categories", categories.Error);
         }
         catch (Exception ex)
         {
@@ -79,8 +82,8 @@ internal class OpenTriviaService : IOpenTriviaService
                 if (!_categoriesInitialized)
                 {
                     // Preload categories to ensure they are available for question retrieval serializer
-                    await _client.GetCategoriesAsync(cancellationToken);
-                    _categoriesInitialized = true;
+                    var categories = await _client.GetCategoriesAsync(cancellationToken);
+                    _categoriesInitialized = categories.IsSuccess;
                 }
             }
             finally

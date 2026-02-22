@@ -22,11 +22,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border"
-                            Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="6"
                             SnapsToDevicePixels="True">
+                        <Border.Background>
+                            <SolidColorBrush Color="{StaticResource OpenTrivia.UI.PrimaryColor}"/>
+                        </Border.Background>
                         <Border.Effect>
                             <DropShadowEffect x:Name="shadow"
                                             Color="#40000000"

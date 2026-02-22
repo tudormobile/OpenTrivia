@@ -66,11 +66,11 @@ public class BooleanConverter : IValueConverter
         {
             throw new InvalidOperationException("The target type must be a Boolean.");
         }
-        var result = convertBackInternal(value, targetType);
+        var result = ConvertBackInternal(value, targetType);
         return IsInverted ? !result : result;
     }
 
-    private bool convertBackInternal(object value, Type targetType)
+    private bool ConvertBackInternal(object value, Type targetType)
     {
         if (TrueValue != UnsetValue && value.Equals(TrueValue)) return true;
         if (FalseValue != UnsetValue && value.Equals(FalseValue)) return false;

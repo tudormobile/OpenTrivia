@@ -24,14 +24,15 @@ public class GameService : IGameService
     /// <inheritdoc />
     public async Task<ServiceResult<TriviaGame>> CreateGameAsync(int amount, IEnumerable<TriviaCategory> categories, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Creating game with {Amount} questions from {CategoryCount} categories", amount, categories.Count());
+        var categoryList = categories.ToList(); // materialize the categories to avoid multiple enumerations
+        _logger.LogInformation("Creating game with {Amount} questions from {CategoryCount} categories", amount, categoryList.Count);
 
-        var questions = await _openTriviaService.GetQuestionsAsync(amount, categories, cancellationToken);
+        var questions = await _openTriviaService.GetQuestionsAsync(amount, categoryList, cancellationToken);
 
         if (questions.IsSuccess)
         {
             _logger.LogInformation("Successfully created game with {QuestionCount} questions", questions.Data!.Count);
-            return ServiceResult.Success(new TriviaGame(questions.Data!, categories));
+            return ServiceResult.Success(new TriviaGame(questions.Data!, categoryList));
         }
 
         _logger.LogWarning("Failed to create game: {Error}", questions.ErrorMessage);
