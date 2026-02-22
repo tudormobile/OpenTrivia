@@ -23,7 +23,9 @@
                         <DataTemplate>
                             <Border Padding="5,0" BorderThickness="0,0,1,0" BorderBrush="Gray">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="0,3,0,0" Text="&#xF0D6;" FontFamily="Segoe Fluent Icons" Width="18" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <TextBlock Text="&#xF0D6;" FontFamily="Segoe Fluent Icons" 
+                                               Width="18" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     <TextBlock Text="{Binding Name}" />
                                 </StackPanel>
                             </Border>

@@ -70,6 +70,13 @@ public partial class GameViewModel : ObservableObject
     }
 
     /// <summary>
+    /// Initializes a new instance of the GameViewModel class using the questions provided by the specified TriviaGame.
+    /// </summary>
+    /// <param name="game">The TriviaGame instance containing the collection of questions to be used in the GameViewModel. Cannot be null.</param>
+    public GameViewModel(TriviaGame game)
+        : this(new QuestionCollection(game?.Questions ?? throw new ArgumentNullException(nameof(game)))) { }
+
+    /// <summary>
     /// Resets the game state by clearing all selected answers and resetting the score.
     /// </summary>
     /// <remarks>Call this method to prepare the game for a new round. All questions will be deselected, and

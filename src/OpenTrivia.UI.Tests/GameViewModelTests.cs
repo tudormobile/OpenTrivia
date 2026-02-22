@@ -69,10 +69,65 @@ public class GameViewModelTests
     }
 
     [TestMethod]
+    public void GameViewModel_Constructor_InitializesWithTriviaGameCorrectly()
+    {
+        // Arrange
+        var triviaQuestions = new[]
+        {
+            new TriviaQuestion
+            {
+                Category = new TriviaCategory { Id = 1, Name = "Science" },
+                Type = TriviaQuestionType.MultipleChoice,
+                Difficulty = TriviaQuestionDifficulty.Easy,
+                Question = "What is H2O?",
+                CorrectAnswer = "Water",
+                IncorrectAnswers = ["Air", "Fire", "Earth"]
+            },
+            new TriviaQuestion
+            {
+                Category = new TriviaCategory { Id = 2, Name = "History" },
+                Type = TriviaQuestionType.TrueFalse,
+                Difficulty = TriviaQuestionDifficulty.Medium,
+                Question = "World War II ended in 1945.",
+                CorrectAnswer = "True",
+                IncorrectAnswers = ["False"]
+            },
+            new TriviaQuestion
+            {
+                Category = new TriviaCategory { Id = 1, Name = "Science" },
+                Type = TriviaQuestionType.MultipleChoice,
+                Difficulty = TriviaQuestionDifficulty.Hard,
+                Question = "What is the chemical symbol for gold?",
+                CorrectAnswer = "Au",
+                IncorrectAnswers = ["Ag", "Fe", "Cu"]
+            }
+        };
+        var game = new TriviaGame(triviaQuestions, triviaQuestions.Select(q => q.Category).Distinct());
+
+        // Act
+        var viewModel = new GameViewModel(game);
+
+        // Assert
+        Assert.IsNotNull(viewModel);
+        // Verify Questions collection
+        Assert.IsNotNull(viewModel.Questions);
+        Assert.HasCount(3, viewModel.Questions);
+
+    }
+
+
+    [TestMethod]
+    public void GameViewModel_Constructor_NullGame_ThrowsArgumentNullException()
+    {
+        // Arrange, Act & Assert
+        Assert.ThrowsExactly<ArgumentNullException>(() => new GameViewModel(game: null!));
+    }
+
+    [TestMethod]
     public void GameViewModel_Constructor_NullQuestions_ThrowsArgumentNullException()
     {
         // Arrange, Act & Assert
-        Assert.ThrowsExactly<ArgumentNullException>(() => new GameViewModel(null!));
+        Assert.ThrowsExactly<ArgumentNullException>(() => new GameViewModel(questions: null!));
     }
 
     [TestMethod]
