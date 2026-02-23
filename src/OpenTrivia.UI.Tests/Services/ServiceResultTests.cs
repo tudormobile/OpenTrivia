@@ -213,5 +213,5 @@ public class ServiceResultTests
         Assert.AreEqual("FAILED", matchResult);
     }
 
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 }

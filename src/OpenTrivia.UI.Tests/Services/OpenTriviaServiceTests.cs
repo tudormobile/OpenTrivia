@@ -335,7 +335,7 @@ public class OpenTriviaServiceTests
         }
     }
 
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 
     #endregion
 }

@@ -77,14 +77,17 @@ public partial class TriviaGameViewModel : ObservableObject
         AnswerCommand.NotifyCanExecuteChanged();
     }
 
-    public static bool CanAnswer(SelectableQuestion question) => !question.IsAnswered;
+    public static bool CanAnswer(SelectableQuestion question) => question is not null && !question.IsAnswered;
 
     partial void OnSelectedQuestionChanged(SelectableQuestion? value)
     {
         var id = value?.Category.Id ?? 0;
-        foreach (var category in Game!.Categories)
+        if (Game is not null)
         {
-            category.IsSelected = category.Id == id;
+            foreach (var category in Game.Categories)
+            {
+                category.IsSelected = category.Id == id;
+            }
         }
     }
 

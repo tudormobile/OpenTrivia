@@ -229,5 +229,5 @@ public class GameServiceTests
         Assert.AreEqual("Specific error", result.Exception.Message);
     }
 
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property
 }
