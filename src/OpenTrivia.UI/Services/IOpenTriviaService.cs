@@ -1,10 +1,20 @@
-﻿namespace Tudormobile.OpenTrivia.UI.Services;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Tudormobile.OpenTrivia.UI.Services;
 
 /// <summary>
 /// Provides access to the Open Trivia Database API for retrieving trivia categories and questions.
 /// </summary>
 public interface IOpenTriviaService
 {
+    /// <summary>
+    /// Creates and initializes a new instance of the <see cref="IOpenTriviaService"/> interface.
+    /// </summary>
+    /// <param name="client">The Open Trivia API client.</param>
+    /// <param name="logger">The logger for diagnostic information.</param>
+    static IOpenTriviaService Create(IOpenTriviaClient client, ILogger<IOpenTriviaService>? logger = null)
+        => new OpenTriviaService(client, logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger<IOpenTriviaService>.Instance);
+
     /// <summary>
     /// Retrieves all available trivia categories from the Open Trivia Database.
     /// </summary>

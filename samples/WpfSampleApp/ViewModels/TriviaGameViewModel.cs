@@ -1,28 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Threading;
+using Tudormobile.OpenTrivia.UI.Services;
+using Tudormobile.OpenTrivia.UI.ViewModels;
 using WpfSampleApp.Services;
 
 namespace WpfSampleApp.ViewModels;
 
-public partial class GameViewModel : ObservableObject
+public partial class TriviaGameViewModel : ObservableObject
 {
+    // use GameViewModel from the UI Library
     private int _countdownSeconds;
-    private DispatcherTimer _timer;
+    private readonly DispatcherTimer _timer;
     private readonly IGameService _gameService;
     private readonly IDialogService _dialogService;
-    public List<SelectableCategory> Categories { get; init; }
+    private List<SelectableCategory> _categories;
 
     [ObservableProperty]
-    public partial List<SelectableQuestion>? Questions { get; private set; }
+    public partial GameViewModel? Game { get; private set; }
 
     [ObservableProperty]
     public partial bool IsLoading { get; set; } = true;
 
     [ObservableProperty]
-    public partial string Score { get; set; } = "0/0";
-
-    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AnswerCommand))]
     public partial SelectableQuestion? SelectedQuestion { get; set; }
 
     public bool IsCountDownVisible => !string.IsNullOrWhiteSpace(CountDown);
@@ -31,12 +32,12 @@ public partial class GameViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsCountDownVisible))]
     public partial string? CountDown { get; set; }
 
-    public GameViewModel(IGameService gameService, IDialogService dialogService, IEnumerable<SelectableCategory> categories)
+    public TriviaGameViewModel(IGameService gameService, IDialogService dialogService, IEnumerable<SelectableCategory> categories)
     {
         _gameService = gameService;
         _dialogService = dialogService;
-        Categories = [.. categories];
-        Categories.ForEach(category => category.IsSelected = false);
+        _categories = [.. categories];
+        _categories.ForEach(c => c.IsSelected = false);
 
         _timer = new DispatcherTimer(TimeSpan.FromSeconds(1),
             DispatcherPriority.Background,
@@ -50,16 +51,21 @@ public partial class GameViewModel : ObservableObject
     private async Task LoadGameAsync()
     {
         IsLoading = true;
-        _countdownSeconds = 5 * (Categories.Count - 1);
+        _countdownSeconds = 5 * (_categories.Count - 1);
         CountDown = "- - -";
         _timer.Start();
-        var triviaGame = await _gameService.CreateGameAsync(Categories.Select(category => category.ToTriviaCategory()));
+        var triviaGame = await _gameService.CreateGameAsync(50, _categories);
         _timer.Stop();
         CountDown = null;
 
-        Questions = [.. triviaGame.Questions.Index().Select(question => new SelectableQuestion(question.Index + 1, question.Item))];
-
-        Score = $"0 / {Questions.Count}";
+        if (triviaGame.IsSuccess)
+        {
+            Game = new GameViewModel(triviaGame.Data!);
+        }
+        else
+        {
+            _dialogService.ShowMessage($"Error: Failed to load game: {triviaGame.ErrorMessage}");
+        }
 
         IsLoading = false;
     }
@@ -67,16 +73,16 @@ public partial class GameViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanAnswer))]
     public void Answer(SelectableQuestion question)
     {
-        question.IsAnswered = true;
-        Score = $"{Questions?.Count(q => q.IsAnswered)} / {Questions?.Count}";
+        question.SelectedAnswer = question.CorrectAnswer;
+        AnswerCommand.NotifyCanExecuteChanged();
     }
 
-    public bool CanAnswer(SelectableQuestion question) => !question.IsAnswered;
+    public static bool CanAnswer(SelectableQuestion question) => !question.IsAnswered;
 
     partial void OnSelectedQuestionChanged(SelectableQuestion? value)
     {
-        var id = value?.CategoryId ?? 0;
-        foreach (var category in Categories)
+        var id = value?.Category.Id ?? 0;
+        foreach (var category in Game!.Categories)
         {
             category.IsSelected = category.Id == id;
         }

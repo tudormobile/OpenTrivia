@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Tudormobile.OpenTrivia.UI.Services;
+using Tudormobile.OpenTrivia.UI.ViewModels;
 using WpfSampleApp.Services;
 using WpfSampleApp.ViewModels;
 
@@ -18,7 +20,7 @@ internal partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CurrentView))]
-    public partial GameViewModel? GameModel { get; set; }
+    public partial TriviaGameViewModel? GameModel { get; set; }
 
     public object? CurrentView => GameModel ?? (object?)CategoriesModel;
 
@@ -36,7 +38,7 @@ internal partial class MainWindowViewModel : ObservableObject
             _dialogService.ShowMessage("Please select at least one category.");
             return;
         }
-        GameModel = new GameViewModel(_gameService, _dialogService, categories);
+        GameModel = new TriviaGameViewModel(_gameService, _dialogService, categories);
     }
 
 }

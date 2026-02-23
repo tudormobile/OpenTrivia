@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Tudormobile.OpenTrivia;
 
 namespace Tudormobile.OpenTrivia.UI.ViewModels;
 
@@ -44,6 +43,16 @@ public partial class SelectableCategory : ObservableObject
     {
         ArgumentNullException.ThrowIfNull(category);
         _category = category;
+    }
+
+    /// <summary>
+    /// Implicitly converts a SelectableCategory to its underlying TriviaCategory.
+    /// </summary>
+    /// <param name="selectableCategory">The selectable category to convert.</param>
+    public static implicit operator TriviaCategory(SelectableCategory selectableCategory)
+    {
+        ArgumentNullException.ThrowIfNull(selectableCategory);
+        return selectableCategory._category;
     }
 
 }

@@ -7,7 +7,7 @@ public partial class GameView
     public GameView()
     {
         InitializeComponent();
-        this.Loaded += (s, e) => (DataContext as GameViewModel)?.LoadGameCommand.Execute(null);
+        this.Loaded += (s, e) => (DataContext as TriviaGameViewModel)?.LoadGameCommand.Execute(null);
     }
 
 }

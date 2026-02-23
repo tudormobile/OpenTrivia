@@ -9,7 +9,7 @@ namespace Tudormobile.OpenTrivia.UI.Services;
 internal class OpenTriviaService : IOpenTriviaService
 {
     private readonly IOpenTriviaClient _client;
-    private readonly ILogger<OpenTriviaService> _logger;
+    private readonly ILogger<IOpenTriviaService> _logger;
     private readonly SemaphoreSlim _initializationLock = new(1, 1);
     private bool _categoriesInitialized;
 
@@ -18,7 +18,7 @@ internal class OpenTriviaService : IOpenTriviaService
     /// </summary>
     /// <param name="client">The Open Trivia API client.</param>
     /// <param name="logger">The logger for diagnostic information.</param>
-    public OpenTriviaService(IOpenTriviaClient client, ILogger<OpenTriviaService> logger)
+    public OpenTriviaService(IOpenTriviaClient client, ILogger<IOpenTriviaService> logger)
     {
         _client = client;
         _logger = logger;

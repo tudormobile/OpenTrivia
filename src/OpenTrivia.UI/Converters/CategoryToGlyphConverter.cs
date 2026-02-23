@@ -25,7 +25,7 @@ public class CategoryToGlyphConverter : IValueConverter
     /// <param name="culture">The culture to use in the converter (not used).</param>
     /// <returns>A string containing a Unicode glyph character representing the category, 
     /// or a question mark glyph (❓) if the category is not recognized.</returns>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         var id = value switch
         {
@@ -44,16 +44,16 @@ public class CategoryToGlyphConverter : IValueConverter
                 12 => "\uE8D6", // Music
                 13 => "\uE734", // Musicals & Theatres
                 14 => "\uE7F4", // Television
-                15 => "\uE7EC", // Video Games
+                15 => "\uE7FC", // Video Games
                 16 => "\uEA86", // Board Games
                 17 => "\uF196", // Science & Nature
                 18 => "\uE977", // Computers
                 19 => "\uE8EF", // Mathematics
-                20 => "\uE9C8", // Mythology
-                21 => "\uE9C8", // Sports
+                20 => "\uE9CE", // Mythology
+                21 => "\uE9CE", // Sports
                 22 => "\uE909", // Geography
-                23 => "\uE820", // History
-                24 => "\uE804", // Politics
+                23 => "\uE82D", // History
+                24 => "\uE8DF", // Politics
                 25 => "\uE790", // Art
                 26 => "\uE716", // Celebrities
                 27 => "\uF1E8", // Animals
@@ -62,9 +62,9 @@ public class CategoryToGlyphConverter : IValueConverter
                 30 => "\uE90F", // Gadgets
                 31 => "\uE87C", // Anime & Manga
                 32 => "\uE771", // Cartoon & Animations
-                _ => "\u2753"
+                _ => "\uE9Ce"
             }
-            : "\ue9c8";
+            : "\uE9CE";
     }
 
     /// <summary>
@@ -76,6 +76,6 @@ public class CategoryToGlyphConverter : IValueConverter
     /// <param name="culture">The culture to use in the converter (not used).</param>
     /// <returns>Not supported - this method always throws <see cref="NotImplementedException"/>.</returns>
     /// <exception cref="NotImplementedException">This converter does not support two-way binding.</exception>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotImplementedException();
 }

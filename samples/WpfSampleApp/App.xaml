@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:WpfSampleApp" ThemeMode="Light"
              >
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Tudormobile.OpenTrivia.UI;component/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
