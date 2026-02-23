@@ -61,14 +61,26 @@ jobs:
         dotnet tool update -g docfx --add-source github-packages --prerelease
         docfx docs/docfx.json
 
+    - name: Upload Docs
+      uses: actions/upload-artifact@v4
+      with:
+        name: docs
+        path: docs/_site
+
     - name: Upload Package
       uses: actions/upload-artifact@v4
       with:
         name: package
-        path: src/OpenTrivia/bin/release/*.nupkg
+        path: src\**\bin\Release\*.nupkg
 
     - name: Create Zip for Release
-      run: compress-archive -Path src\OpenTrivia\bin\release\*.nupkg -Destination package.zip -Force
+      run: |
+        $tempDir = New-Item -ItemType Directory -Path (Join-Path $env:TEMP ([System.Guid]::NewGuid()))
+        Get-ChildItem -Path src -Recurse -Filter *.nupkg | Where-Object { $_.FullName -like '*\bin\release\*' } | ForEach-Object { Copy-Item $_.FullName -Destination $tempDir }
+        Push-Location $tempDir
+        Compress-Archive -Path $tempDir\* -Destination package.zip -Force
+        Pop-Location
+        Remove-Item $tempDir -Recurse -Force
 
     - name: Test output
       run: echo ${{ steps.version_step.outputs.fullSemVer }}     
@@ -90,5 +102,8 @@ jobs:
         echo "Adding local repo as nuget source"
         dotnet nuget add source --username tudormobile --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/tudormobile/index.json"
         echo "Pushing package"
-        dotnet nuget push "src\OpenTrivia\bin\release\*.nupkg" --source "github" --skip-duplicate
-        dotnet nuget push "src\OpenTrivia\bin\release\*.nupkg" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_TOKEN }}
+        Get-ChildItem -Path src -Recurse -Filter *.nupkg | Where-Object { $_.FullName -like '*\bin\release\*' } | ForEach-Object {
+          Write-Host "Pushing $($_.FullName)" 
+          dotnet nuget push $_.FullName --source "github" --skip-duplicate 
+          dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_TOKEN }}
+        }

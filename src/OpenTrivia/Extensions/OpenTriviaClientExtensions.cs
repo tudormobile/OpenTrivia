@@ -75,6 +75,12 @@ public static class OpenTriviaClientExtensions
                 }
             }
 
+            // Randomize the combined list of questions if multiple categories were provided, otherwise return the single category results as is
+            if (categories.Count() > 1)
+            {
+                allQuestions = [.. allQuestions.OrderBy(_ => Random.Shared.Next())];
+            }
+
             return new ApiResponse<List<TriviaQuestion>>(error: questions.Error, data: allQuestions)
             {
                 ResponseCode = questions.ResponseCode,

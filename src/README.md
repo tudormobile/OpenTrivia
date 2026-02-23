@@ -19,10 +19,17 @@ Building a release configuration will generate nuget package(s) in the respectiv
 ## Projects
 - src\OpenTrivia
     - Library
+- src\OpenTrivia.UI
+    - Windows Desktop Library (WPF)
 - src\OpenTrivia.Tests
     - Unit tests
+- src\OpenTrivia.UI.Tests
+    - Unit tests for desktop library
+- src\OpenTrivia.IntegrationTests
+    - Integration tests (these hit the actual OpenTriviaDB web services)
 - docs\docfx.json
     - Documentation
 - samples\
     - **SimpleConsoleApp** - Simple console application
     - **ExtendedConsoleApp** - Console application using extensibility model
+    - **WpfSampleApp** - Sample Windows Desktop (WPF) application showcasing the UI library

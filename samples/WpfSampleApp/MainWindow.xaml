@@ -1,0 +1,66 @@
+﻿<Window x:Class="WpfSampleApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSampleApp"
+        xmlns:views="clr-namespace:WpfSampleApp.Views"
+        xmlns:viewmodels="clr-namespace:WpfSampleApp.ViewModels"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="450" Width="800">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:CategoriesViewModel}">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <TextBlock Text="Choose Categories:" FontSize="20" FontWeight="Bold" Margin="10" />
+                <views:CategoriesView Grid.Row="1" />
+                <Button Grid.Row="2" Content="Create Game" FontSize="20" FontWeight="Bold" Margin="10" MaxWidth="200" 
+                        CommandParameter="{Binding SelectedCategories}"
+                        Command="{Binding DataContext.CreateGameCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Green"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Padding" Value="15,10"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="14"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                            VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00bc00"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00e200"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter TargetName="border" Property="Background" Value="#6C757D"/>
+                                                <Setter TargetName="border" Property="Opacity" Value="0.65"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:TriviaGameViewModel}">
+            <views:GameView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <ContentControl Content="{Binding CurrentView}"/>
+</Window>
