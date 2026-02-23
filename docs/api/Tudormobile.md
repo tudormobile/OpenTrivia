@@ -13,5 +13,19 @@ using Tudormobile.OpenTrivia.Extensions;
 - [Tudormobile.OpenTrivia.Extensions](Tudormobile.OpenTrivia.Extensions.yml)
     - Extensions methods.  
 
+### Tudormobile.OpenTrivia.UI.dll
+```
+using Tudormobile.OpenTrivia.UI;
+using Tudormobile.OpenTrivia.UI.Converters;
+using Tudormobile.OpenTrivia.UI.Services;
+using Tudormobile.OpenTrivia.UI.Views;
+using Tudormobile.OpenTrivia.UI.ViewModels;
+```
+- [Tudormobile.OpenTrivia.UI](Tudormobile.OpenTrivia.UI.yml) - UI library (Windows Desktop, WPF).
+    - [Tudormobile.OpenTrivia.UI.Converters](Tudormobile.OpenTrivia.UI.Converters.yml)
+    - [Tudormobile.OpenTrivia.UI.Services](Tudormobile.OpenTrivia.UI.Services.yml)
+    - [Tudormobile.OpenTrivia.UI.Views](Tudormobile.OpenTrivia.UI.Views.yml)
+    - [Tudormobile.OpenTrivia.UI.ViewModels](Tudormobile.OpenTrivia.UI.ViewModels.yml)
+
 Latest unit testing results are shown below.
 [!include[summary](../../output/SummaryGithub.md)]

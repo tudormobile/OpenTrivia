@@ -8,9 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Additional sample applications (e.g., WPF, ASP.NET Core Web API, Blazor WebAssembly)
-- Support for additional API endpoints (e.g., question count, global question count)
+- Additional sample applications (e.g., ASP.NET Core Web API, Blazor WebAssembly)
 - Enhanced documentation with more discussion, examples, and best practices
+
+## [1.1.0] - 2026-02-23
+- Added Wpf sample application
+- Added Windows Desktop UI library
+- Improved documentation
+- Support for remaining API endpoints (question counts)
 
 ## [1.0.0] - 2026-02-14
 

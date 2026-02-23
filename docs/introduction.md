@@ -36,6 +36,36 @@ HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHttpClient();           // required for OpenTriviaClient to use
 builder.Services.AddOpenTriviaClient(options => options.Encoding = ApiEncoding.Base64);
 ```
+### UI (Desktop) Library
+```bash
+dotnet add package Tudormobile.OpenTrivia.UI
+```
+Adding the UI package automatically includes the base package *Tudormobile.OpenTrivia* as well as the *CommunityToolkit.Mvvm*.
+
+#### In *App.Xaml*, include the library resources
+```cs
+<Application.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="pack://application:,,,/Tudormobile.OpenTrivia.UI;component/Resources.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+</Application.Resources>
+```
+You can now reference resources (DataTemplates, Brushes and Colors, Styles) available for Trivia Game elements.
+### In C# code files
+```cs
+using Tudormobile.OpenTrivia.UI;
+using  Tudormobile.OpenTrivia.UI.Views;
+using  Tudormobile.OpenTrivia.UI.ViewModels;
+using  Tudormobile.OpenTrivia.UI.Converters;
+using  Tudormobile.OpenTrivia.UI.Services;
+
+// Utilize the available views, view models, converters, and services from the UI library.
+
+// ...
+```
+See the desktop sample application for details.
 
 ### Sample Code
 Some simple code samples are provided in the *samples/* folder. 
@@ -43,3 +73,5 @@ Some simple code samples are provided in the *samples/* folder.
     - A console application using the simple OpenTriviaClient (no extensions).
 - ExtendedConsoleApp
     - A console application using the entity object model provided by the library as well as Microsoft's dependency injection, logging, and application host extensions.
+- WpfSampleApp
+    - A desktop application (wpf) using the UI library.

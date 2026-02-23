@@ -9,7 +9,7 @@ A c# library to access the Open Trivia Database (OpenTriviaDB) Api.
 
 ### Quick Start
 
-#### Low-level (Basic) API:
+#### Basic API:
 ```cs
 using Tudormobile.OpenTrivia;
 
@@ -52,8 +52,6 @@ HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
     .AddLogging(builder => builder.AddConsole());
 
 using IHost host = builder.Build();
-var logger = host.Services.GetRequiredService<ILogger<Program>>();
-
 var client = host.Services.GetRequiredService<IOpenTriviaClient>();
 
 var query = await client.GetQuestionsAsync(amount: 10);

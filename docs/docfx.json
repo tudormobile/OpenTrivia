@@ -5,7 +5,8 @@
         {
           "src": "../src",
           "files": [
-            "**/OpenTrivia/bin/release/net10.0/**.dll"
+            "**/OpenTrivia/bin/release/net10.0/**.dll",
+            "**/OpenTrivia.UI/bin/release/net10.0-windows/**.dll"
           ],
           "exclude": [
             "**/*Tests.csproj"

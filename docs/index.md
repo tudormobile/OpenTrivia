@@ -12,3 +12,6 @@ _layout: landing
 
 
 [`Source Code`](https://github.com/tudormobile/OpenTrivia) | [`Nuget Package`](https://github.com/users/tudormobile/packages/nuget/package/Tudormobile.OpenTrivia)  
+
+---
+[!include[summary](../../output/CHANGELOG.md)]
