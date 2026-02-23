@@ -78,7 +78,7 @@ jobs:
         $tempDir = New-Item -ItemType Directory -Path (Join-Path $env:TEMP ([System.Guid]::NewGuid()))
         Get-ChildItem -Path src -Recurse -Filter *.nupkg | Where-Object { $_.FullName -like '*\bin\release\*' } | ForEach-Object { Copy-Item $_.FullName -Destination $tempDir }
         Push-Location $tempDir
-        Compress-Archive -Path $tempDir\* -Destination "$PWD/package.zip" -Force
+        Compress-Archive -Path $tempDir\* -Destination ../package.zip -Force
         Pop-Location
         Remove-Item $tempDir -Recurse -Force
 
