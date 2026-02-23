@@ -7,6 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Game View" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Game View (not completed)" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+                <local:CategoriesView DataContext="{Binding Categories}"/>
+                <ListBox ItemsSource="{Binding Questions}" ItemTemplate="{StaticResource OpenTrivia.UI.QuestionWithAnswersTemplate}"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

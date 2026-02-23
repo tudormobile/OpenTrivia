@@ -1,20 +1,24 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using WpfSampleApp.Services;
+using Tudormobile.OpenTrivia;
+using Tudormobile.OpenTrivia.UI.Services;
+using Tudormobile.OpenTrivia.UI.ViewModels;
 
 namespace WpfSampleApp.ViewModels;
 
 public partial class CategoriesViewModel : ObservableObject
 {
     private readonly IOpenTriviaService _triviaService;
-    public ObservableCollection<SelectableCategory> Categories { get; init; } = [];
-    public IEnumerable<SelectableCategory> SelectedCategories => Categories.Where(c => c.IsSelected);
+    public CategoryCollection Categories { get; init; }
+    public IEnumerable<SelectableCategory> SelectedCategories => Categories.SelectedCategories;
+
     [ObservableProperty]
     public partial bool IsLoading { get; set; }
+
     public CategoriesViewModel(IOpenTriviaService triviaService)
     {
         _triviaService = triviaService;
+        Categories = new CategoryCollection([]);
     }
 
     /// <summary>
@@ -27,6 +31,12 @@ public partial class CategoriesViewModel : ObservableObject
         var categories = await _triviaService.GetCategoriesAsync();
         IsLoading = false;
 
-        categories.ForEach(category => Categories.Add(new(category)));
+        if (categories.IsSuccess && categories.Data is IReadOnlyList<TriviaCategory> categoriesList)
+        {
+            foreach (var category in categoriesList)
+            {
+                Categories.Add(new SelectableCategory(category));
+            }
+        }
     }
 }

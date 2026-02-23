@@ -10,11 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\OpenTrivia\OpenTrivia.csproj" />
+    <ProjectReference Include="..\..\src\OpenTrivia.UI\OpenTrivia.UI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -57,7 +57,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewmodels:GameViewModel}">
+        <DataTemplate DataType="{x:Type viewmodels:TriviaGameViewModel}">
             <views:GameView />
         </DataTemplate>
     </Window.Resources>

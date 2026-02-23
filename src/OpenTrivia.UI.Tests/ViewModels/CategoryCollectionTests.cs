@@ -2,7 +2,7 @@
 using Tudormobile.OpenTrivia;
 using Tudormobile.OpenTrivia.UI.ViewModels;
 
-namespace OpenTrivia.UI.Tests;
+namespace OpenTrivia.UI.Tests.ViewModels;
 
 [TestClass]
 public class CategoryCollectionTests

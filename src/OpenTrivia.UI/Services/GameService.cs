@@ -5,17 +5,17 @@ namespace Tudormobile.OpenTrivia.UI.Services;
 /// <summary>
 /// Implements game management services for creating and managing trivia games.
 /// </summary>
-public class GameService : IGameService
+internal class GameService : IGameService
 {
     private readonly IOpenTriviaService _openTriviaService;
-    private readonly ILogger<GameService> _logger;
+    private readonly ILogger<IGameService> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GameService"/> class.
     /// </summary>
     /// <param name="openTriviaService">The Open Trivia service used to fetch questions.</param>
     /// <param name="logger">The logger for diagnostic information.</param>
-    public GameService(IOpenTriviaService openTriviaService, ILogger<GameService> logger)
+    public GameService(IOpenTriviaService openTriviaService, ILogger<IGameService> logger)
     {
         _openTriviaService = openTriviaService;
         _logger = logger;
