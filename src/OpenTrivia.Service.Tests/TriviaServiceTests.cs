@@ -9,7 +9,7 @@ namespace OpenTrivia.Service.Tests;
 [TestClass]
 public class TriviaServiceTests
 {
-    public TestContext TestContext { get; set; }
+    public TestContext TestContext { get; set; } // MSTest will set this property automatically
 
     #region GetStatusAsync Tests
 

@@ -11,6 +11,8 @@ Accept: application/json
 ###
 
 # Questions Endpoint
+
+# Invalid request without required parameters expected to return an error response
 GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions
 Accept: application/json
 ###
@@ -19,6 +21,7 @@ GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions?amount=2
 Accept: application/json
 ###
 
+# Invalid amount parameter (zero or negative number) expected to return an error response
 GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions?amount=0
 Accept: application/json
 ###

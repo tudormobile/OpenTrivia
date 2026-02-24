@@ -99,7 +99,7 @@ namespace Tudormobile.OpenTrivia.Service
             // Validate amount
             if (amount < 1 || amount > 50)
             {
-                return Results.BadRequest(new { success = false, message = "Amount must be between 1 and 50." });
+                return Results.BadRequest(new { success = false, error = "Amount must be between 1 and 50." });
             }
 
             // Parse optional parameters
