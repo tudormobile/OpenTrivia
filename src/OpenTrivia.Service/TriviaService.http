@@ -1,7 +1,7 @@
 @OpenTrivia.Service_HostAddress = http://localhost:5197
 
 # OpenTrivia API Root Endpoint
-GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1
 Accept: application/json
 ###
 

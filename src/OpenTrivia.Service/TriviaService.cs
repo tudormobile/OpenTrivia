@@ -176,7 +176,7 @@ namespace Tudormobile.OpenTrivia.Service
             // TODO: Implement game retrieval logic
             await Task.CompletedTask;
 
-            return Results.NotFound(new { success = false, message = $"Game with ID '{id}' not found. Feature not yet implemented." });
+            return Results.NotFound(new { success = false, message = "Game with provided ID was not found. Feature not yet implemented." });
         }
 
         /// <summary>
