@@ -50,7 +50,7 @@ using Tudormobile.OpenTrivia.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenTriviaService(
+builder.Services.AddTriviaService(
     options => options.WithRateLimitManagement(true));
 // ...
 
@@ -58,9 +58,9 @@ var app = builder.Build();
 // ...
 
 // Map in the trivia service endpoints
-app.UseOpenTriviaService(prefix: String.Empty);
+app.UseTriviaService(prefix: String.Empty);
 
 app.Run();
 ```
-You can configure the endpoints to be exposed from the root of your webweb application or under a provided prefix. 
+You can configure the endpoints to be exposed from the root of your web application or under a provided prefix. 
 

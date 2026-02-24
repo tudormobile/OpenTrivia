@@ -9,17 +9,17 @@ namespace Tudormobile.OpenTrivia.Service
     /// This service acts as a wrapper around the <see cref="IOpenTriviaClient"/> to provide
     /// HTTP endpoint handlers for retrieving trivia categories and service status information.
     /// </remarks>
-    public class OpenTriviaService
+    public class TriviaService : ITriviaService
     {
         private readonly ILogger _logger;
         private readonly IOpenTriviaClient _openTriviaClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenTriviaService"/> class.
+        /// Initializes a new instance of the <see cref="TriviaService"/> class.
         /// </summary>
         /// <param name="openTriviaClient">The OpenTrivia client used to communicate with the OpenTrivia API.</param>
         /// <param name="logger">The logger instance for logging diagnostic information.</param>
-        public OpenTriviaService(IOpenTriviaClient openTriviaClient, ILogger<OpenTriviaService> logger)
+        public TriviaService(IOpenTriviaClient openTriviaClient, ILogger<TriviaService> logger)
         {
             _openTriviaClient = openTriviaClient;
             _logger = logger;
@@ -33,10 +33,11 @@ namespace Tudormobile.OpenTrivia.Service
         /// <returns>An <see cref="IResult"/> containing the service status and available categories information.</returns>
         public async Task<IResult> GetStatusAsync(HttpContext context, CancellationToken cancellationToken)
         {
+            LogApiRequest(context);
             var categories = await _openTriviaClient.GetCategoriesAsync(cancellationToken);
             return Results.Ok(new
             {
-                success = true,
+                success = categories.IsSuccess,
                 data = new
                 {
                     categories = categories.IsSuccess ? categories.Data : null,
@@ -111,7 +112,7 @@ namespace Tudormobile.OpenTrivia.Service
                     "easy" => TriviaQuestionDifficulty.Easy,
                     "medium" => TriviaQuestionDifficulty.Medium,
                     "hard" => TriviaQuestionDifficulty.Hard,
-                    _ => null
+                    _ => null   // Allows all difficulty levels when missing or unrecognized
                 };
             }
 
@@ -122,7 +123,7 @@ namespace Tudormobile.OpenTrivia.Service
                 {
                     "multiple" => TriviaQuestionType.MultipleChoice,
                     "boolean" => TriviaQuestionType.TrueFalse,
-                    _ => null
+                    _ => null // Allows all question types when missing or unrecognized
                 };
             }
 
@@ -194,12 +195,7 @@ namespace Tudormobile.OpenTrivia.Service
             // - Return game ID and initial state
             await Task.CompletedTask;
 
-            return Results.Ok(new 
-            { 
-                success = true, 
-                message = "Game creation not yet implemented.",
-                data = new { gameId = Guid.NewGuid().ToString(), status = "placeholder" }
-            });
+            return Results.StatusCode(StatusCodes.Status501NotImplemented);
         }
 
         /// <summary>
@@ -209,7 +205,7 @@ namespace Tudormobile.OpenTrivia.Service
         /// <param name="callerName">The name of the calling method, automatically populated by the compiler.</param>
         private void LogApiRequest(HttpContext context, [CallerMemberName] string callerName = "")
         {
-            _logger.LogInformation("{ServiceName}, {CallerName}, {RemoteIpAddress}", nameof(OpenTriviaService), callerName, context.Connection.RemoteIpAddress);
+            _logger.LogInformation("{ServiceName}, {CallerName}, {RemoteIpAddress}", nameof(TriviaService), callerName, context.Connection.RemoteIpAddress);
         }
     }
 }

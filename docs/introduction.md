@@ -80,7 +80,7 @@ using Tudormobile.OpenTrivia.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenTriviaService(
+builder.Services.AddTriviaService(
     options => options.WithRateLimitManagement(true));
 // ...
 
@@ -88,7 +88,7 @@ var app = builder.Build();
 // ...
 
 // Map in the trivia service endpoints
-app.UseOpenTriviaService(prefix: String.Empty);
+app.UseTriviaService(prefix: String.Empty);
 ```
 See the complete API documentation for details.
 

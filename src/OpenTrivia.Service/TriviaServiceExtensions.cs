@@ -5,7 +5,7 @@ namespace Tudormobile.OpenTrivia.Service;
 /// <summary>
 /// Extension methods for configuring the OpenTrivia service endpoints.
 /// </summary>
-public static class OpenTriviaServiceExtensions
+public static class TriviaServiceExtensions
 {
     /// <summary>
     /// Adds the OpenTrivia client and service to the specified <see cref="IServiceCollection"/>.
@@ -13,12 +13,12 @@ public static class OpenTriviaServiceExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="configure">Optional action to configure the <see cref="IOpenTriviaClientBuilder"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
-    public static IServiceCollection AddOpenTriviaService(
+    public static IServiceCollection AddTriviaService(
         this IServiceCollection services,
         Action<IOpenTriviaClientBuilder>? configure = null)
     {
         services.AddOpenTriviaClient(configure ?? (options => { }));
-        services.AddSingleton<OpenTriviaService>();
+        services.AddScoped<ITriviaService, TriviaService>();
         return services;
     }
 
@@ -31,10 +31,11 @@ public static class OpenTriviaServiceExtensions
     /// <param name="app">The web application instance to which the OpenTrivia service endpoints are added.</param>
     /// <param name="prefix">The URL prefix used to namespace the OpenTrivia service endpoints. Must be a valid URL segment if it is provided.</param>
     /// <returns>The web application instance with the OpenTrivia service endpoints mapped.</returns>
-    public static WebApplication UseOpenTriviaService(this WebApplication app, string prefix = "")
+    public static WebApplication UseTriviaService(this WebApplication app, string prefix = "")
     {
+        prefix = prefix.TrimEnd('/');
         // Implementation for mapping the OpenTrivia service endpoints
-        var triviaService = app.Services.GetRequiredService<OpenTriviaService>();
+        var triviaService = app.Services.GetRequiredService<ITriviaService>();
         app.MapGet($"{prefix}/trivia/api/v1", async Task<IResult> (HttpContext context, CancellationToken cancellationToken)
             => await triviaService.GetStatusAsync(context, cancellationToken));
 
@@ -43,7 +44,7 @@ public static class OpenTriviaServiceExtensions
 
         app.MapGet($"{prefix}/trivia/api/v1/questions", async Task<IResult> (
             HttpContext context,
-            [FromQuery] int amount,
+            [FromQuery] int amount = 0,
             [FromQuery] string? category = null,
             [FromQuery] string? difficulty = null,
             [FromQuery] string? type = null,
@@ -60,7 +61,7 @@ public static class OpenTriviaServiceExtensions
         app.MapPost($"{prefix}/trivia/api/v1/games", async Task<IResult> (HttpContext context, CancellationToken cancellationToken)
             => await triviaService.CreateGameAsync(context, cancellationToken));
 
-        app.Logger.LogInformation("{ServiceName} is running", nameof(OpenTriviaService));
+        app.Logger.LogInformation("{ServiceName} is running", nameof(TriviaService));
         return app;
     }
 }

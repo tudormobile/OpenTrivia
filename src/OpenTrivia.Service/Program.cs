@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 // Register OpenTrivia client and service
-builder.Services.AddOpenTriviaService(options => options.WithRateLimitManagement(true));
+builder.Services.AddTriviaService(options => options.WithRateLimitManagement(true));
 
 // Build the application
 var app = builder.Build();
@@ -14,9 +14,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 // Map in the service endpoints
-app.UseOpenTriviaService(prefix: String.Empty);
+app.UseTriviaService(prefix: String.Empty);
 
 // Start the application
 app.Run();
-
-

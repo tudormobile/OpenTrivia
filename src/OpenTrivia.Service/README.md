@@ -24,7 +24,7 @@ The following endpoints are available in the Tudormobile.OpenTrivia.Service libr
 - **/trivia/api/v1**: Root endpoint that provides information about the service.
 - **/trivia/api/v1/categories**: Retrieves a list of trivia categories.
 - **/trivia/api/v1/questions**: Endpoint for retrieving trivia questions based on specified criteria such as category, difficulty, and type.
-- **/trivia/api/v1/game**: Endpoint for managing trivia games, including creating a new game, joining an existing game, and retrieving game details.
+- **/trivia/api/v1/games**: Endpoint for managing trivia games, including creating a new game, joining an existing game, and retrieving game details.
 
 The questions and categories endpoints will proxy requests to the Open Trivia Database API and are provided only as a convenience. Feel free to use the Open Trivia Database API directly if you prefer. The game endpoint is specific to this service and will manage game state and player interactions within the service. The game endpoint utilizes category IDs from the Open Trivia Database API, so you can use the categories endpoint to retrieve valid category IDs for use in the game endpoint.
 
@@ -42,7 +42,8 @@ For example, the response from the categories endpoint looks like this:
     {"id": 9, "name": "General Knowledge"},
     {"id": 10, "name": "Entertainment: Books"},
     ...
-    ],
+    ]
+  },
   "error": null
 }
 ```
@@ -111,7 +112,7 @@ The response from the game endpoint will vary based on the specific action being
   "error": null
 }
 ```
-The error object (shown as null in the above examples) is normally ommitted when the request is successful, but will contain information about any errors that occurred during the request if the success field is false. The structure of the error object is as follows:
+The error object (shown as null in the above examples) is normally omitted when the request is successful, but will contain information about any errors that occurred during the request if the success field is false. The structure of the error object is as follows:
 ```json
 {
   "code": "ERROR_CODE",
