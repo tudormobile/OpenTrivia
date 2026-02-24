@@ -34,16 +34,18 @@ public static class TriviaServiceExtensions
     public static WebApplication UseTriviaService(this WebApplication app, string prefix = "")
     {
         prefix = prefix.TrimEnd('/');
-        // Implementation for mapping the OpenTrivia service endpoints
-        var triviaService = app.Services.GetRequiredService<ITriviaService>();
-        app.MapGet($"{prefix}/trivia/api/v1", async Task<IResult> (HttpContext context, CancellationToken cancellationToken)
+
+        app.MapGet($"{prefix}/trivia/api/v1", async Task<IResult> (
+            HttpContext context, ITriviaService triviaService, CancellationToken cancellationToken)
             => await triviaService.GetStatusAsync(context, cancellationToken));
 
-        app.MapGet($"{prefix}/trivia/api/v1/categories", async Task<IResult> (HttpContext context, CancellationToken cancellationToken)
+        app.MapGet($"{prefix}/trivia/api/v1/categories", async Task<IResult> (
+            HttpContext context, ITriviaService triviaService, CancellationToken cancellationToken)
             => await triviaService.GetCategoriesAsync(context, cancellationToken));
 
         app.MapGet($"{prefix}/trivia/api/v1/questions", async Task<IResult> (
             HttpContext context,
+            ITriviaService triviaService,
             [FromQuery] int amount = 0,
             [FromQuery] string? category = null,
             [FromQuery] string? difficulty = null,
@@ -54,11 +56,13 @@ public static class TriviaServiceExtensions
 
         app.MapGet($"{prefix}/trivia/api/v1/games/{{id}}", async Task<IResult> (
             HttpContext context,
+            ITriviaService triviaService,
             [FromRoute] string id,
             CancellationToken cancellationToken = default)
             => await triviaService.GetGameAsync(context, id, cancellationToken));
 
-        app.MapPost($"{prefix}/trivia/api/v1/games", async Task<IResult> (HttpContext context, CancellationToken cancellationToken)
+        app.MapPost($"{prefix}/trivia/api/v1/games", async Task<IResult> (
+            HttpContext context, ITriviaService triviaService, CancellationToken cancellationToken)
             => await triviaService.CreateGameAsync(context, cancellationToken));
 
         app.Logger.LogInformation("{ServiceName} is running", nameof(TriviaService));

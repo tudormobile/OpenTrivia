@@ -14,7 +14,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 // Map in the service endpoints
-app.UseTriviaService(prefix: String.Empty);
+app.UseTriviaService(prefix: string.Empty);
 
 // Start the application
 app.Run();

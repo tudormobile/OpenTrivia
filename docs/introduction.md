@@ -88,7 +88,7 @@ var app = builder.Build();
 // ...
 
 // Map in the trivia service endpoints
-app.UseTriviaService(prefix: String.Empty);
+app.UseTriviaService(prefix: string.Empty);
 ```
 See the complete API documentation for details.
 

@@ -97,6 +97,7 @@ The response from the game endpoint will vary based on the specific action being
         ]
       }
     ],
+    "questions": [
       {
         "category": "General Knowledge",
         "type": "multiple",
