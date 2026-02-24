@@ -27,5 +27,12 @@ using Tudormobile.OpenTrivia.UI.ViewModels;
     - [Tudormobile.OpenTrivia.UI.Views](Tudormobile.OpenTrivia.UI.Views.yml)
     - [Tudormobile.OpenTrivia.UI.ViewModels](Tudormobile.OpenTrivia.UI.ViewModels.yml)
 
+### Tudormobile.OpenTrivia.Service.dll
+```
+using Tudormobile.OpenTrivia.Service;
+```
+- [Tudormobile.OpenTrivia.Service](Tudormobile.OpenTrivia.Service.yml)
+    - Web Services Library (AspNet)
+
 Latest unit testing results are shown below.
 [!include[summary](../../output/SummaryGithub.md)]

@@ -23,7 +23,7 @@ Extensions provide additional methods including an entity-object model to furthe
 ```bash
 dotnet add package Tudormobile.OpenTrivia.UI
 ```
-### Dependencies
+#### Dependencies
 Tudormobile.OpenTrivia
 CommunityToolkit.MVVM
 
@@ -36,3 +36,31 @@ using Tudormobile.OpenTrivia.UI.Views;
 using Tudormobile.OpenTrivia.UI.ViewModels;
 ```
 The UI library provides resources, converters, services, views, and view models for building desktop (WPF) UI for Open Trivia games and game elements.
+
+### Install the package (AspNet Web Application)
+```bash
+dotnet add package Tudormobile.OpenTrivia.Service
+```
+#### Dependencies
+Tudormobile.OpenTrivia
+
+### Including library provided services
+```cs
+using Tudormobile.OpenTrivia.Service;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTriviaService(
+    options => options.WithRateLimitManagement(true));
+// ...
+
+var app = builder.Build();
+// ...
+
+// Map in the trivia service endpoints
+app.UseTriviaService(prefix: string.Empty);
+
+app.Run();
+```
+You can configure the endpoints to be exposed from the root of your web application or under a provided prefix. 
+

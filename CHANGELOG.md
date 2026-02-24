@@ -10,10 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned
 - Additional sample applications (e.g., ASP.NET Core Web API, Blazor WebAssembly)
 - Enhanced documentation with more discussion, examples, and best practices
+- Complete the Web API design and implementation
+
+## [1.2.0] - 2026-02-24
+### Added
+- AspNet Web Api library (early stages/incomplete)
 
 ## [1.1.0] - 2026-02-23
-- Added Wpf sample application
-- Added Windows Desktop UI library
+### Added
+- Wpf sample application
+- Windows Desktop UI library
 - Improved documentation
 - Support for remaining API endpoints (question counts)
 

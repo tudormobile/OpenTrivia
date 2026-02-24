@@ -1,0 +1,41 @@
+@OpenTrivia.Service_HostAddress = http://localhost:5197
+
+# OpenTrivia API Root Endpoint
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1
+Accept: application/json
+###
+
+# Categories Endpoint
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/categories
+Accept: application/json
+###
+
+# Questions Endpoint
+
+# Invalid request without required parameters expected to return an error response
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions
+Accept: application/json
+###
+
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions?amount=2
+Accept: application/json
+###
+
+# Invalid amount parameter (zero or negative number) expected to return an error response
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions?amount=0
+Accept: application/json
+###
+
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/questions?amount=10&category=23&difficulty=easy&type=boolean&encode=url3986
+Accept: application/json
+###
+
+# Games Endpoint
+POST {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/games
+Accept: application/json
+Content-Type: application/json
+###
+
+GET {{OpenTrivia.Service_HostAddress}}/trivia/api/v1/games/123
+Accept: application/json
+###

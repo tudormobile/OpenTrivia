@@ -6,7 +6,8 @@
           "src": "../src",
           "files": [
             "**/OpenTrivia/bin/release/net10.0/**.dll",
-            "**/OpenTrivia.UI/bin/release/net10.0-windows/Tudormobile.OpenTrivia.UI.dll"
+            "**/OpenTrivia.UI/bin/release/net10.0-windows/Tudormobile.OpenTrivia.UI.dll",
+            "**/OpenTrivia.Service/bin/release/net10.0/Tudormobile.OpenTrivia.Service.dll"
           ],
           "exclude": [
             "**/*Tests.csproj"

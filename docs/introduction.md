@@ -53,7 +53,7 @@ Adding the UI package automatically includes the base package *Tudormobile.OpenT
 </Application.Resources>
 ```
 You can now reference resources (DataTemplates, Brushes and Colors, Styles) available for Trivia Game elements.
-### In C# code files
+#### In C# code files
 ```cs
 using Tudormobile.OpenTrivia.UI;
 using  Tudormobile.OpenTrivia.UI.Views;
@@ -66,6 +66,31 @@ using  Tudormobile.OpenTrivia.UI.Services;
 // ...
 ```
 See the desktop sample application for details.
+
+### Web Services Library
+```bash
+dotnet add package Tudormobile.OpenTrivia.Service
+```
+Adding the service package automatically includes the base package *Tudormobile.OpenTrivia*.
+
+#### In host application builder, add/configure/use the service:
+
+```cs
+using Tudormobile.OpenTrivia.Service;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTriviaService(
+    options => options.WithRateLimitManagement(true));
+// ...
+
+var app = builder.Build();
+// ...
+
+// Map in the trivia service endpoints
+app.UseTriviaService(prefix: string.Empty);
+```
+See the complete API documentation for details.
 
 ### Sample Code
 Some simple code samples are provided in the *samples/* folder. 

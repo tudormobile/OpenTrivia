@@ -5,6 +5,8 @@
     <Project Path="samples/WpfSampleApp/WpfSampleApp.csproj" />
   </Folder>
   <Project Path="src/OpenTrivia.IntegrationTests/OpenTrivia.IntegrationTests.csproj" />
+  <Project Path="src/OpenTrivia.Service/OpenTrivia.Service.csproj" />
+  <Project Path="src/OpenTrivia.Service.Tests/OpenTrivia.Service.Tests.csproj" />
   <Project Path="src/OpenTrivia.Tests/OpenTrivia.Tests.csproj" />
   <Project Path="src/OpenTrivia.UI.Tests/OpenTrivia.UI.Tests.csproj" />
   <Project Path="src/OpenTrivia.UI/OpenTrivia.UI.csproj" />

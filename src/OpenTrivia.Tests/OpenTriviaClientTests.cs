@@ -68,7 +68,7 @@ public class OpenTriviaClientTests
         Assert.IsTrue(response.IsSuccess);
         Assert.IsNotNull(response.Data);
         Assert.AreEqual(ApiResponseCode.Success, response.ResponseCode);
-        Assert.AreEqual(String.Empty, response.Data.Token);
+        Assert.AreEqual(string.Empty, response.Data.Token);
     }
 
     [TestMethod]
