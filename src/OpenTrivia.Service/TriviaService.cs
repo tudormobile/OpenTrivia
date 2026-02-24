@@ -31,6 +31,11 @@ namespace Tudormobile.OpenTrivia.Service
         /// <param name="context">The HTTP context for the current request.</param>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>An <see cref="IResult"/> containing the service status and available categories information.</returns>
+        /// <remarks>
+        /// This endpoint always returns Http 200 OK to indicate that the service is running, even if the OpenTrivia API is unreachable. 
+        /// The response includes a success flag and a message indicating the number of categories available, which can be used to 
+        /// determine if the OpenTrivia API is responsive.
+        /// </remarks>
         public async Task<IResult> GetStatusAsync(HttpContext context, CancellationToken cancellationToken)
         {
             LogApiRequest(context);
@@ -63,7 +68,7 @@ namespace Tudormobile.OpenTrivia.Service
             {
                 return Results.Ok(new { success = true, data = response.Data });
             }
-            return Results.Problem(response.ErrorMessage);
+            return ApiErrorResult(response.ResponseCode, response.ErrorMessage);
         }
 
         /// <summary>
@@ -151,7 +156,7 @@ namespace Tudormobile.OpenTrivia.Service
             {
                 return Results.Ok(new { success = true, data = response.Data });
             }
-            return Results.Problem(response.ErrorMessage);
+            return ApiErrorResult(response.ResponseCode, response.ErrorMessage);
         }
 
         /// <summary>
@@ -197,6 +202,34 @@ namespace Tudormobile.OpenTrivia.Service
 
             return Results.StatusCode(StatusCodes.Status501NotImplemented);
         }
+
+        /// <summary>
+        /// Creates a consistent error response using the documented <c>{ success, error }</c> envelope format
+        /// with an HTTP status code mapped from the upstream <see cref="ApiResponseCode"/>.
+        /// </summary>
+        private IResult ApiErrorResult(ApiResponseCode responseCode, string? errorMessage, [CallerMemberName] string callerName = "")
+        {
+            _logger.LogWarning("{ServiceName}, {CallerName}, Error: {ResponseCode} - {ErrorMessage}",
+                nameof(TriviaService), callerName, responseCode, errorMessage);
+
+            var statusCode = MapStatusCode(responseCode);
+            return Results.Json(
+                new { success = false, error = errorMessage ?? responseCode.ToString() },
+                statusCode: statusCode);
+        }
+
+        /// <summary>
+        /// Maps an <see cref="ApiResponseCode"/> from the upstream Open Trivia DB API to an appropriate HTTP status code.
+        /// </summary>
+        private static int MapStatusCode(ApiResponseCode responseCode) => responseCode switch
+        {
+            ApiResponseCode.NoResults => StatusCodes.Status404NotFound,
+            ApiResponseCode.InvalidParameter => StatusCodes.Status400BadRequest,
+            ApiResponseCode.TokenNotFound => StatusCodes.Status401Unauthorized,
+            ApiResponseCode.TokenEmpty => StatusCodes.Status404NotFound,
+            ApiResponseCode.RateLimit => StatusCodes.Status429TooManyRequests,
+            _ => StatusCodes.Status502BadGateway,
+        };
 
         /// <summary>
         /// Logs information about an API request.

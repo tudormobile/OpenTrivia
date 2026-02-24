@@ -83,7 +83,7 @@ public class TriviaServiceTests
     }
 
     [TestMethod]
-    public async Task GetCategoriesAsync_WithFailedClient_ReturnsProblem()
+    public async Task GetCategoriesAsync_WithFailedClient_ReturnsErrorEnvelope()
     {
         // Arrange
         var (service, client) = CreateService();
@@ -95,7 +95,10 @@ public class TriviaServiceTests
         var result = await service.GetCategoriesAsync(context, TestContext.CancellationToken);
 
         // Assert
-        Assert.IsInstanceOfType<ProblemHttpResult>(result);
+        Assert.AreEqual(404, GetStatusCode(result));
+        var json = await ExecuteAndParseJsonAsync(result);
+        Assert.IsFalse(json.RootElement.GetProperty("success").GetBoolean());
+        Assert.IsTrue(json.RootElement.TryGetProperty("error", out _));
     }
 
     #endregion
@@ -260,7 +263,7 @@ public class TriviaServiceTests
     }
 
     [TestMethod]
-    public async Task GetQuestionsAsync_WithFailedClient_ReturnsProblem()
+    public async Task GetQuestionsAsync_WithFailedClient_ReturnsErrorEnvelope()
     {
         // Arrange
         var (service, client) = CreateService();
@@ -272,7 +275,10 @@ public class TriviaServiceTests
         var result = await service.GetQuestionsAsync(context, 5, cancellationToken: TestContext.CancellationToken);
 
         // Assert
-        Assert.IsInstanceOfType<ProblemHttpResult>(result);
+        Assert.AreEqual(404, GetStatusCode(result));
+        var json = await ExecuteAndParseJsonAsync(result);
+        Assert.IsFalse(json.RootElement.GetProperty("success").GetBoolean());
+        Assert.IsTrue(json.RootElement.TryGetProperty("error", out _));
     }
 
     #endregion

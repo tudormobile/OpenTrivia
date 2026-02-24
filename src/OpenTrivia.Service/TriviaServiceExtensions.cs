@@ -19,6 +19,8 @@ public static class TriviaServiceExtensions
     {
         services.AddOpenTriviaClient(configure ?? (options => { }));
         services.AddScoped<ITriviaService, TriviaService>();
+        services.AddExceptionHandler<TriviaServiceExceptionHandler>();
+        services.AddProblemDetails();
         return services;
     }
 
@@ -34,6 +36,7 @@ public static class TriviaServiceExtensions
     public static WebApplication UseTriviaService(this WebApplication app, string prefix = "")
     {
         prefix = prefix.TrimEnd('/');
+        app.UseExceptionHandler();
 
         app.MapGet($"{prefix}/trivia/api/v1", async Task<IResult> (
             HttpContext context, ITriviaService triviaService, CancellationToken cancellationToken)
