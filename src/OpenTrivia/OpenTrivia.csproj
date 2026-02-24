@@ -4,7 +4,7 @@
     <RootNamespace>Tudormobile.$(MSBuildProjectName)</RootNamespace>
     <Product>Tudormobile OpenTrivia API</Product>
     <Description>C#.NET library for accessing the Open Trivia Database API. Optionally supports dependency injection (DI) and logging.</Description>
-    <PackageTags>opentrivia;trivia;opentbd</PackageTags>
+    <PackageTags>opentrivia;trivia;opentdb</PackageTags>
     <PackageProjectUrl>https://tudormobile.github.io/OpenTrivia/</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/tudormobile/OpenTrivia/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/tudormobile/OpenTrivia</RepositoryUrl>
