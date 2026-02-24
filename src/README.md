@@ -21,6 +21,8 @@ Building a release configuration will generate nuget package(s) in the respectiv
     - Library
 - src\OpenTrivia.UI
     - Windows Desktop Library (WPF)
+- src\OpenTrivia.Service
+    - Web Services Library (AspNet)
 - src\OpenTrivia.Tests
     - Unit tests
 - src\OpenTrivia.UI.Tests

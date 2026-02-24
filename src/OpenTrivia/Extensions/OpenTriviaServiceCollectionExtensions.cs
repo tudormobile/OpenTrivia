@@ -30,7 +30,7 @@ public static class OpenTriviaServiceCollectionExtensions
         // Register HttpClient for OpenTriviaClient
         services.AddHttpClient(nameof(OpenTriviaClient));
         // Register IOpenTriviaClient with a factory that provides the API key
-        services.AddScoped<IOpenTriviaClient>(sp =>
+        services.AddSingleton<IOpenTriviaClient>(sp =>
         {
             var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
             var logger = sp.GetRequiredService<ILogger<OpenTriviaClient>>();
